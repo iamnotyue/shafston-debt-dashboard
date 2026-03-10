@@ -3,327 +3,725 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Shafston AP Dashboard</title>
+<title>Shafston Debt Management Dashboard</title>
 <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
 <script src="https://unpkg.com/prop-types@15/prop-types.min.js" crossorigin></script>
 <script src="https://unpkg.com/recharts@2.12.7/umd/Recharts.js" crossorigin></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#0B1120;color:#E2E8F0;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;min-height:100vh}
+body{background:#0B1120;color:#E2E8F0;font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh}
 .app{max-width:1400px;margin:0 auto;padding:20px}
 .header{text-align:center;padding:24px 0 16px}
 .header h1{font-size:24px;font-weight:700;color:#F8FAFC;letter-spacing:-0.5px}
-.header .subtitle{font-size:13px;color:#64748B;margin-top:4px}
+.header .sub{font-size:13px;color:#64748B;margin-top:4px}
 .tabs{display:flex;gap:4px;justify-content:center;margin:16px 0 20px;flex-wrap:wrap}
 .tab{padding:8px 20px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:500;background:#1E293B;color:#94A3B8;border:1px solid transparent;transition:all .2s}
 .tab:hover{background:#334155;color:#CBD5E1}
 .tab.active{background:#3B82F6;color:#FFF;border-color:#3B82F6}
 .grid{display:grid;gap:16px}
-.grid-4{grid-template-columns:repeat(4,1fr)}
-.grid-3{grid-template-columns:repeat(3,1fr)}
-.grid-2{grid-template-columns:repeat(2,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}.g3{grid-template-columns:repeat(3,1fr)}.g2{grid-template-columns:repeat(2,1fr)}
 .card{background:#1E293B;border-radius:12px;padding:20px;border:1px solid #334155}
-.card-title{font-size:12px;color:#64748B;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px}
-.card-value{font-size:28px;font-weight:700;color:#F8FAFC}
-.card-value.green{color:#34D399}.card-value.red{color:#F87171}.card-value.blue{color:#60A5FA}.card-value.amber{color:#FBBF24}
-.card-sub{font-size:12px;color:#64748B;margin-top:4px}
-.section-title{font-size:16px;font-weight:600;color:#F1F5F9;margin:24px 0 12px;display:flex;align-items:center;gap:8px}
+.ct{font-size:12px;color:#64748B;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.cv{font-size:28px;font-weight:700;color:#F8FAFC}
+.cv.green{color:#34D399}.cv.red{color:#F87171}.cv.blue{color:#60A5FA}.cv.amber{color:#FBBF24}.cv.purple{color:#A78BFA}
+.cs{font-size:12px;color:#64748B;margin-top:4px}
+.st{font-size:16px;font-weight:600;color:#F1F5F9;margin:24px 0 12px;display:flex;align-items:center;gap:8px}
 .badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600}
-.badge-blue{background:rgba(59,130,246,.15);color:#60A5FA}
-.badge-red{background:rgba(248,113,113,.15);color:#F87171}
-.badge-green{background:rgba(52,211,153,.15);color:#34D399}
-.badge-amber{background:rgba(251,191,36,.15);color:#FBBF24}
+.b-red{background:rgba(248,113,113,.15);color:#F87171}
+.b-green{background:rgba(52,211,153,.15);color:#34D399}
+.b-amber{background:rgba(251,191,36,.15);color:#FBBF24}
+.b-blue{background:rgba(59,130,246,.15);color:#60A5FA}
 table{width:100%;border-collapse:collapse;font-size:13px}
 th{text-align:left;padding:10px 12px;color:#94A3B8;font-weight:500;border-bottom:1px solid #334155;font-size:12px;text-transform:uppercase;letter-spacing:.3px}
 td{padding:10px 12px;border-bottom:1px solid rgba(51,65,85,.5);color:#CBD5E1}
 tr:hover td{background:rgba(51,65,85,.3)}
-.text-right{text-align:right}.text-center{text-align:center}
-.pct-bar{height:6px;border-radius:3px;background:#334155;overflow:hidden;min-width:60px}
-.pct-fill{height:100%;border-radius:3px;transition:width .3s}
-.legend-row{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin:8px 0}
-.legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:#94A3B8}
-.legend-dot{width:10px;height:10px;border-radius:2px}
+.tr{text-align:right}
+.pbar{height:8px;border-radius:4px;background:#334155;overflow:hidden;min-width:80px}
+.pfill{height:100%;border-radius:4px;transition:width .3s}
 .note{font-size:12px;color:#64748B;padding:12px 16px;background:rgba(30,41,59,.5);border-radius:8px;border-left:3px solid #3B82F6;margin-top:12px}
-@media(max-width:900px){.grid-4,.grid-3{grid-template-columns:repeat(2,1fr)}.grid-2{grid-template-columns:1fr}}
-@media(max-width:600px){.grid-4,.grid-3,.grid-2{grid-template-columns:1fr}.app{padding:12px}}
+.warn{border-left-color:#F59E0B}
+@media(max-width:900px){.g4,.g3{grid-template-columns:repeat(2,1fr)}.g2{grid-template-columns:1fr}}
+@media(max-width:600px){.g4,.g3,.g2{grid-template-columns:1fr}.app{padding:12px}}
 </style>
 </head>
 <body>
 <div id="root"></div>
 <script>
 var e=React.createElement;
-var R=Recharts;
-var PieChart=R.PieChart,Pie=R.Pie,Cell=R.Cell,BarChart=R.BarChart,Bar=R.Bar,XAxis=R.XAxis,YAxis=R.YAxis,CartesianGrid=R.CartesianGrid,Tooltip=R.Tooltip,ResponsiveContainer=R.ResponsiveContainer,ComposedChart=R.ComposedChart,Line=R.Line,Area=R.Area,AreaChart=R.AreaChart;
+var useState=React.useState;
 
+// === DATA START ===
+// ========== TAB 1: DEBT MANAGEMENT DATA ==========
+var TRADE_PAYABLE=532375;
+var TRADE_INVOICES=468;
+var LT_DEBT=1599154;
+var INVESTIGATE=47080;
 var CATS=[
-  {name:"OPEX",credit:1982695.45,debit:1830095.58,net:152599.87,count:2221,color:"#3B82F6"},
-  {name:"Commission",credit:270478,debit:162300.79,net:108177.21,count:840,color:"#8B5CF6"},
-  {name:"Study Tour",credit:1017941.66,debit:965430.72,net:52510.94,count:2568,color:"#06B6D4"},
-  {name:"Rent & Outgoing",credit:225058.68,debit:184335.21,net:40723.47,count:201,color:"#F59E0B"},
-  {name:"Refund",credit:156362.4,debit:118659.45,net:37702.95,count:111,color:"#F87171"}
+  {name:"Commission",outstanding:353804,invoices:403,color:"#8B5CF6"},
+  {name:"Refund",outstanding:73558,invoices:18,color:"#F87171"},
+  {name:"Rent & Outgoing",outstanding:69147,invoices:7,color:"#F59E0B"},
+  {name:"OPEX",outstanding:35866,invoices:40,color:"#3B82F6"},
 ];
-var TN=CATS.reduce(function(s,c){return s+c.net},0);
-var TC=CATS.reduce(function(s,c){return s+c.credit},0);
-var TD=CATS.reduce(function(s,c){return s+c.debit},0);
-var LTD=1347583.19;
-var ADJ=2703067.93-LTD;
-
-var MT=[
-  {month:"Jul 25",Refund:-1537,Commission:-26848,"Study Tour":46293,"Rent & Outgoing":14361,OPEX:-2799},
-  {month:"Aug 25",Refund:31001,Commission:30426,"Study Tour":-36994,"Rent & Outgoing":5623,OPEX:-22358},
-  {month:"Sep 25",Refund:22687,Commission:21839,"Study Tour":4075,"Rent & Outgoing":437988,OPEX:52582},
-  {month:"Oct 25",Refund:-4601,Commission:30280,"Study Tour":-6890,"Rent & Outgoing":385059,OPEX:23873},
-  {month:"Nov 25",Refund:-40146,Commission:14740,"Study Tour":-1778,"Rent & Outgoing":50708,OPEX:27493},
-  {month:"Dec 25",Refund:12072,Commission:4623,"Study Tour":3079,"Rent & Outgoing":387174,OPEX:12001},
-  {month:"Jan 26",Refund:15009,Commission:31984,"Study Tour":10177,"Rent & Outgoing":32132,OPEX:25382},
-  {month:"Feb 26",Refund:3217,Commission:112,"Study Tour":-2353,"Rent & Outgoing":74050,OPEX:-12218},
-  {month:"Mar 26",Refund:0,Commission:1020,"Study Tour":36902,"Rent & Outgoing":1211,OPEX:48644}
+var EXTRA_DEBT=[
+  {name:"Superannuation",outstanding:30503,color:"#EC4899",source:"Payroll (pre-2026 overdue)"},
+  {name:"ATO",outstanding:724508,color:"#F97316",source:"Xero BS CA02"},
+  {name:"Payroll Tax",outstanding:75266,color:"#14B8A6",source:"QRO (manual)"}
 ];
-
-var MCD=[
-  {month:"Jul 25",credit:821177,debit:791706},{month:"Aug 25",credit:595367,debit:587669},
-  {month:"Sep 25",credit:830603,debit:291431},{month:"Oct 25",credit:719661,debit:291940},
-  {month:"Nov 25",credit:350165,debit:299148},{month:"Dec 25",credit:723174,debit:304227},
-  {month:"Jan 26",credit:360373,debit:245688},{month:"Feb 26",credit:470324,debit:407515},
-  {month:"Mar 26",credit:143720,debit:55943}
+var TOTAL_DEBT=1362652;
+var maxCat=353804;
+var CLEAR_START=617806;
+var CLEAR_TOTAL=85431;
+var CLEARANCE=[
+  {label:"Jan",cleared:37338,cumCleared:37338,remaining:580468,partial:false},
+  {label:"Feb",cleared:45475,cumCleared:82813,remaining:534993,partial:false},
+  {label:"Mar",cleared:2617,cumCleared:85430,remaining:532376,partial:true},
 ];
-
-var TS=[
-  {name:"Shafston Sydney",net:493869,credit:493869,cat:"OPEX",count:82},
-  {name:"QLD Staff Hire",net:343218,credit:343218,cat:"OPEX",count:17},
-  {name:"Aust Peng Intl",net:87943,credit:87943,cat:"Study Tour",count:49},
-  {name:"Homestay Australia",net:75560,credit:75560,cat:"Study Tour",count:11},
-  {name:"UniLodge",net:75335,credit:75335,cat:"Rent",count:22},
-  {name:"BCC (Rates)",net:73816,credit:73816,cat:"Rent",count:7},
-  {name:"JS Chiang",net:69165,credit:69165,cat:"OPEX",count:7},
-  {name:"Greenwich College",net:54344,credit:54344,cat:"OPEX",count:2},
-  {name:"St Pauls School",net:51554,credit:51554,cat:"Study Tour",count:10},
-  {name:"CKW Investment",net:44000,credit:44000,cat:"OPEX",count:3},
-  {name:"ReadyTeacher",net:40449,credit:40449,cat:"OPEX",count:12},
-  {name:"Tomoe Yamada",net:39069,credit:39069,cat:"OPEX",count:20},
-  {name:"Uchoice Holidays",net:35414,credit:35414,cat:"Study Tour",count:6},
-  {name:"Joseph Rinella",net:32511,credit:32511,cat:"Study Tour",count:12},
-  {name:"Wonder Byte",net:30074,credit:30074,cat:"OPEX",count:1}
+var CAT_CLEARANCE=[
+  {name:"Rent & Outgoing",color:"#F59E0B",jan:11569,feb:18202,mar:0,total:29771,start:98918,remaining:69147},
+  {name:"OPEX",color:"#3B82F6",jan:10923,feb:9631,mar:0,total:20554,start:56420,remaining:35866},
+  {name:"Study Tour",color:"#06B6D4",jan:5794,feb:8060,mar:2144,total:15998,start:15998,remaining:0},
+  {name:"Commission",color:"#8B5CF6",jan:1985,feb:7795,mar:473,total:10253,start:364057,remaining:353804},
+  {name:"Refund",color:"#F87171",jan:7067,feb:1788,mar:0,total:8855,start:82413,remaining:73558},
 ];
-
-var RP=[
-  {name:"BCC (Rates)",credit:73816.14,paid:34981.69,net:38834.45},
-  {name:"UniLodge",credit:75335.3,paid:69322.88,net:6012.42},
-  {name:"CKW Investment",credit:6900.61,paid:0,net:6900.61},
-  {name:"Environ Air",credit:4949.95,paid:0,net:4949.95},
-  {name:"Charlton Brown",credit:17600,paid:13200,net:4400},
-  {name:"Colliers (Elec)",credit:6045.67,paid:2396.37,net:3649.3}
+var STAT_CLEAR_START=906178;
+var STAT_CLEAR_TOTAL=75901;
+var STAT_CLEARANCE=[
+  {name:"ATO",color:"#F97316",start:730508,jan:2000,feb:4000,mar:0,total:6000,remaining:724508},
+  {name:"Super",color:"#EC4899",start:79878,jan:1087,feb:48288,mar:0,total:49375,remaining:30503},
+  {name:"Payroll Tax",color:"#14B8A6",start:95792,jan:6842,feb:6842,mar:6842,total:20526,remaining:75266},
 ];
-
-var LTI=[
-  {name:"Burgundy Education",net:1020999.42,credit:1020999.42,paid:0},
-  {name:"Colliers (Rent)",net:273272.35,credit:287717.52,paid:14445.17},
-  {name:"Coastal Commercial",net:53311.42,credit:53311.42,paid:0}
+// ========== TAB 2: PAYABLE MANAGEMENT DATA (2026, DueDate<=today, excl HR accts/LT_DEBT/INVESTIGATE, inc statutory) ==========
+var PAY_TOTAL_INV=630419;
+var PAY_TOTAL_PAID=473407;
+var PAY_TOTAL_OUT=84361;
+var PAY_INVOICES=426;
+var PAY_MONTHLY=[
+  {label:"Jan",invoiced:267709,paid:169650,unpaid:46846,rate:63.4,cumInv:267709,cumPaid:169650,cumOut:46846,dueOverdue:"N/A",partial:false},
+  {label:"Feb",invoiced:278019,paid:249736,unpaid:11603,rate:89.8,cumInv:545728,cumPaid:419386,cumOut:58449,dueOverdue:"N/A",partial:false},
+  {label:"Mar",invoiced:83665,paid:52995,unpaid:25912,rate:63.3,cumInv:629393,cumPaid:472381,cumOut:84361,dueOverdue:"N/A",partial:true},
+  {label:"Apr",invoiced:750,paid:750,unpaid:0,rate:100,cumInv:630143,cumPaid:473131,cumOut:84361,dueOverdue:"N/A",partial:false},
+  {label:"Jul",invoiced:276,paid:276,unpaid:0,rate:100,cumInv:630419,cumPaid:473407,cumOut:84361,dueOverdue:"N/A",partial:false},
 ];
-var LTT=LTI.reduce(function(s,i){return s+i.net},0);
+var PAY_CAT=[
+  {name:"OPEX",color:"#3B82F6",inv:283631,paid:241863,out:7198,cnt:296,
+   janInv:152269,janPaid:120963,febInv:106929,febPaid:101339,marInv:24433,marPaid:19561,aprInv:0,aprPaid:0,julInv:0,julPaid:0},
+  {name:"Study Tour",color:"#06B6D4",inv:218059,paid:202621,out:15559,cnt:55,
+   janInv:25549,janPaid:25549,febInv:143639,febPaid:143639,marInv:48871,marPaid:33433,aprInv:0,aprPaid:0,julInv:0,julPaid:0},
+  {name:"Rent & Outgoing",color:"#F59E0B",inv:50589,paid:17414,out:18925,cnt:20,
+   janInv:36608,janPaid:13106,febInv:9769,febPaid:4308,marInv:4211,marPaid:0,aprInv:0,aprPaid:0,julInv:0,julPaid:0},
+  {name:"Refund",color:"#F87171",inv:29872,paid:5806,out:24068,cnt:18,
+   janInv:27432,janPaid:5356,febInv:2440,febPaid:450,marInv:0,marPaid:0,aprInv:0,aprPaid:0,julInv:0,julPaid:0},
+  {name:"Commission",color:"#8B5CF6",inv:23551,paid:5702,out:18611,cnt:37,
+   janInv:20166,janPaid:4676,febInv:2359,febPaid:0,marInv:0,marPaid:0,aprInv:750,aprPaid:750,julInv:276,julPaid:276},
+  {name:"Superannuation",color:"#A78BFA",inv:31716,paid:0,out:0,cnt:0,
+   janInv:12684,janPaid:0,febInv:12883,febPaid:0,marInv:6149,marPaid:0,aprInv:0,aprPaid:0,julInv:0,julPaid:0},
+  {name:"ATO (BAS)",color:"#F97316",inv:-7000,paid:0,out:0,cnt:0,
+   janInv:-7000,janPaid:0,febInv:0,febPaid:0,marInv:0,marPaid:0,aprInv:0,aprPaid:0,julInv:0,julPaid:0},
+  {name:"Payroll Tax",color:"#14B8A6",inv:0,paid:0,out:0,cnt:0,
+   janInv:0,janPaid:0,febInv:0,febPaid:0,marInv:0,marPaid:0,aprInv:0,aprPaid:0,julInv:0,julPaid:0},
+];
+var PAY_UNPAID=[
+  {contact:"BRISBANE CITY COUNCIL",invNum:"BCC Rate - 101/188 SHAFSTON AVE -Q1 2026",ref:"BCC Rate - 101/188 SHAFST",date:"2026-01-01",dueDate:"2026-01-01",total:9253,paid:0,due:9253,cat:"Rent & Outgoing",mo:"Jan"},
+  {contact:"Mark David RAVU",invNum:"Refund-Mark David RAVU",ref:"Refund-Mark David RAVU",date:"2026-01-07",dueDate:"2026-02-04",total:5246,paid:0,due:5246,cat:"Refund",mo:"Jan"},
+  {contact:"GUANGXI Elite Education and Investment L",invNum:"Admin - 202603-2",ref:"Admin - 202603-2",date:"2026-03-03",dueDate:"2026-03-06",total:4725,paid:0,due:4725,cat:"OPEX",mo:"Mar"},
+  {contact:"Aust Peng International Pty Ltd",invNum:"ST - INV202602122-Okayama Daianji-final payment",ref:"ST - INV202602122-Okayama",date:"2026-03-05",dueDate:"2026-03-05",total:4230,paid:0,due:4230,cat:"Study Tour",mo:"Mar"},
+  {contact:"Yazmin ARISMENDI OCAMPO",invNum:"Refund-Yazmin ARISMENDI OCAMPO",ref:"Refund-Yazmin ARISMENDI O",date:"2026-01-28",dueDate:"2026-02-25",total:3831,paid:0,due:3831,cat:"Refund",mo:"Jan"},
+  {contact:"BRISBANE CITY COUNCIL",invNum:"BCC Rate - 100/188 SHAFSTON AVE - 2026",ref:"BCC Rate - 100/188 SHAFST",date:"2026-02-06",dueDate:"2026-02-06",total:3660,paid:0,due:3660,cat:"Rent & Outgoing",mo:"Feb"},
+  {contact:"Masato SHINDO",invNum:"Refund-Masato SHINDO",ref:"Refund-Masato SHINDO",date:"2026-01-20",dueDate:"2026-02-17",total:3010,paid:0,due:3010,cat:"Refund",mo:"Jan"},
+  {contact:"UniLodge @ Shafston",invNum:"SERV-INV-05032026-602-Unit 602",ref:"SERV-INV-05032026-602-Uni",date:"2026-03-05",dueDate:"2026-03-05",total:2431,paid:0,due:2431,cat:"Rent & Outgoing",mo:"Mar"},
+  {contact:"Yixi XIONG",invNum:"Refund-Yixi XIONG",ref:"Refund-Yixi XIONG",date:"2026-01-21",dueDate:"2026-02-18",total:2371,paid:0,due:2371,cat:"Refund",mo:"Jan"},
+  {contact:"St Paul's School",invNum:"ST-INV-  Tour 26-18-Oizumi High School-Deposit",ref:"ST-INV-  Tour 26-18-Oizum",date:"2026-03-05",dueDate:"2026-03-05",total:2200,paid:0,due:2200,cat:"Study Tour",mo:"Mar"},
+  {contact:"Jinghan XIONG",invNum:"Refund-Jinghan XIONG",ref:"Refund-Jinghan XIONG",date:"2026-01-21",dueDate:"2026-02-18",total:2096,paid:0,due:2096,cat:"Refund",mo:"Jan"},
+  {contact:"Bestone Print",invNum:"ST-print-INV00010",ref:"ST-print-INV00010",date:"2026-03-05",dueDate:"2026-03-05",total:1894,paid:0,due:1894,cat:"Study Tour",mo:"Mar"},
+  {contact:"AG-YouTOOProject",invNum:"INTCOMM-INV-56124-Ana Maria ROBELLAT PEREZ-GE INST 2",ref:"INTCOMM-INV-56124-Ana Mar",date:"2026-01-12",dueDate:"2026-02-12",total:1827,paid:0,due:1827,cat:"Commission",mo:"Jan"},
+  {contact:"UniLodge @ Shafston",invNum:"SERV-INV-13022026-812-Unit 812",ref:"SERV-INV-13022026-812-Uni",date:"2026-02-12",dueDate:"2026-02-12",total:1801,paid:0,due:1801,cat:"Rent & Outgoing",mo:"Feb"},
+  {contact:"UniLodge @ Shafston",invNum:"SERV-INV-05032026-713-Unit 713",ref:"SERV-INV-05032026-713-Uni",date:"2026-03-05",dueDate:"2026-03-05",total:1780,paid:0,due:1780,cat:"Rent & Outgoing",mo:"Mar"},
+  {contact:"AG-Deway Education (ACEC)",invNum:"INTCOMM-INV-SF19012026-Yuyao ZHANG-HSP INST 1",ref:"INTCOMM-INV-SF19012026-Yu",date:"2026-01-19",dueDate:"2026-02-19",total:1616,paid:0,due:1616,cat:"Commission",mo:"Jan"},
+  {contact:"AG-Deway Education (ACEC)",invNum:"INTCOMM-INV-SF19012026-Yuyao ZHANG-HSP INST 2",ref:"INTCOMM-INV-SF19012026-Yu",date:"2026-01-19",dueDate:"2026-02-19",total:1616,paid:0,due:1616,cat:"Commission",mo:"Jan"},
+  {contact:"Suwa LOTTA",invNum:"Refund-Suwa LOTTA-SAOS Bond",ref:"Refund-Suwa LOTTA-SAOS Bo",date:"2026-02-06",dueDate:"2026-03-06",total:1540,paid:0,due:1540,cat:"Refund",mo:"Feb"},
+  {contact:"AG-Ausity Consulting",invNum:"INTCOMM-INV-0202260311-Yihan YIN-HSP FULL",ref:"INTCOMM-INV-0202260311-Yi",date:"2026-01-26",dueDate:"2026-02-26",total:1430,paid:0,due:1430,cat:"Commission",mo:"Jan"},
+  {contact:"TURRBAL DIPPIL PTY LTD",invNum:"ST-INV-TD3495-Okayama Daianji",ref:"ST-INV-TD3495-Okayama Dai",date:"2026-03-04",dueDate:"2026-03-04",total:1315,paid:0,due:1315,cat:"Study Tour",mo:"Mar"},
+  {contact:"TURRBAL DIPPIL PTY LTD",invNum:"ST-INV-TD3493-Okayama Daianji",ref:"ST-INV-TD3493-Okayama Dai",date:"2026-03-04",dueDate:"2026-03-04",total:1315,paid:0,due:1315,cat:"Study Tour",mo:"Mar"},
+  {contact:"TURRBAL DIPPIL PTY LTD",invNum:"ST-INV-TD3492-Okayama Daianji",ref:"ST-INV-TD3492-Okayama Dai",date:"2026-03-04",dueDate:"2026-03-04",total:1315,paid:0,due:1315,cat:"Study Tour",mo:"Mar"},
+  {contact:"AG-Deway Education (ACEC)",invNum:"INTCOMM-SF19012026-Yuyao ZHANG-HSP 10-weeks FULL",ref:"INTCOMM-SF19012026-Yuyao ",date:"2026-01-19",dueDate:"2026-02-19",total:1293,paid:0,due:1293,cat:"Commission",mo:"Jan"},
+  {contact:"Clearmatch Originate Pty Limited",invNum:"Public liability-$1,269.51",ref:"Public liability-$1,269.5",date:"2026-03-09",dueDate:"2026-03-10",total:1270,paid:0,due:1270,cat:"OPEX",mo:"Mar"},
+  {contact:"I Made Tapayasa PUTRA NADI",invNum:"Refund-I Made Tapayasa Putra Nadi",ref:"Refund-I Made Tapayasa Pu",date:"2026-01-07",dueDate:"2026-02-04",total:1225,paid:0,due:1225,cat:"Refund",mo:"Jan"},
+  {contact:"Geckoes Wildlife Pty Ltd",invNum:"ST-INV- 00007391-Okayama Daianji",ref:"ST-INV- 00007391-Okayama ",date:"2026-03-09",dueDate:"2026-03-09",total:1210,paid:0,due:1210,cat:"Study Tour",mo:"Mar"},
+  {contact:"Aust Peng International Pty Ltd",invNum:"ST -INV 2026022302-GRP CHIM -70%deposit",ref:"ST -INV 2026022302-GRP CH",date:"2026-03-06",dueDate:"2026-03-06",total:1120,paid:0,due:1120,cat:"Study Tour",mo:"Mar"},
+  {contact:"Ya-Ting CHEN",invNum:"Refund-Ya-Ting CHEN-homestay",ref:"Refund-Ya-Ting CHEN-homes",date:"2026-01-27",dueDate:"2026-02-24",total:1108,paid:0,due:1108,cat:"Refund",mo:"Jan"},
+  {contact:"Ko-Hsuan CHEN",invNum:"Refund-Ko-Hsuan CHEN-homestay",ref:"Refund-Ko-Hsuan CHEN-home",date:"2026-01-27",dueDate:"2026-02-24",total:1108,paid:0,due:1108,cat:"Refund",mo:"Jan"},
+  {contact:"Kiichi ISHINO",invNum:"Refund-Kiichi ISHINO",ref:"Refund-Kiichi ISHINO",date:"2026-01-16",dueDate:"2026-02-13",total:1015,paid:0,due:1015,cat:"Refund",mo:"Jan"},
+  {contact:"AG-MIN TOUR &TRAVEL",invNum:"INTCOMM- 17 FEB 2026 -Agent Bonus",ref:"INTCOMM- 17 FEB 2026 -Age",date:"2026-02-24",dueDate:"2026-03-06",total:900,paid:0,due:900,cat:"Commission",mo:"Feb"},
+  {contact:"Aust Peng International Pty Ltd",invNum:"ST - INV202602123-Okayama Daianji-final payment",ref:"ST - INV202602123-Okayama",date:"2026-03-05",dueDate:"2026-03-05",total:810,paid:0,due:810,cat:"Study Tour",mo:"Mar"},
+  {contact:"AG-Dylan Realty Pty Ltd",invNum:"INTCOMM-INV-202526013-Yihan XU-YLC FULL",ref:"INTCOMM-INV-202526013-Yih",date:"2026-02-02",dueDate:"2026-03-02",total:743,paid:0,due:743,cat:"Commission",mo:"Feb"},
+  {contact:"Ana Luz ECHEVERRIA CRUZ",invNum:"Refund-Ana Luz ECHEVERRIA CRUZ",ref:"Refund-Ana Luz ECHEVERRIA",date:"2026-01-30",dueDate:"2026-02-27",total:570,paid:0,due:570,cat:"Refund",mo:"Jan"},
+  {contact:"AG-360 Life Experience",invNum:"INTCOMM-INV-564-Grace Isabella TORRES ORTIZ-HSP INST 2&3 Balance",ref:"INTCOMM-INV-564-Grace Isa",date:"2026-01-14",dueDate:"2026-01-14",total:540,paid:0,due:540,cat:"Commission",mo:"Jan"},
+  {contact:"AG-Fernandes Migration",invNum:"INTCOMM-INV-13351-Karen DE SOUZA POTER-C3ECEC INST 1&2",ref:"INTCOMM-INV-13351-Karen D",date:"2026-01-22",dueDate:"2026-02-22",total:531,paid:0,due:531,cat:"Commission",mo:"Jan"},
+  {contact:"AG-LAE Latino Australia Education",invNum:"INTCOMM-INV-95762-Anai Romina HERRERA PEREZ-C3ECEC INST 1&2",ref:"INTCOMM-INV-95762-Anai Ro",date:"2026-01-23",dueDate:"2026-02-23",total:531,paid:0,due:531,cat:"Commission",mo:"Jan"},
+  {contact:"AG-WEST 1",invNum:"INTCOMM-INV-0691-Kauany Luisa DOS SANTOS VIEIRA-DIT INST 6",ref:"INTCOMM-INV-0691-Kauany L",date:"2026-01-22",dueDate:"2026-02-22",total:505,paid:0,due:505,cat:"Commission",mo:"Jan"},
+  {contact:"AG-Direction Australia",invNum:"INTCOMM-INV-26068-Luiggi Octavio CASTAGNETO ORE-DCS INST 2",ref:"INTCOMM-INV-26068-Luiggi ",date:"2026-01-28",dueDate:"2026-02-28",total:505,paid:0,due:505,cat:"Commission",mo:"Jan"},
+  {contact:"AG-Fernandes Migration",invNum:"INTCOMM-INV-13360-Thais ROMERO CAMPIAO-DECEC INST 6",ref:"INTCOMM-INV-13360-Thais R",date:"2026-01-13",dueDate:"2026-02-13",total:505,paid:0,due:505,cat:"Commission",mo:"Jan"},
+  {contact:"AG-Migrate Services Links Pty Ltd",invNum:"INTCOMM-INV-10084-Rodna CHECO SANCHEZ-C3ECEC INST 5",ref:"INTCOMM-INV-10084-Rodna C",date:"2026-01-06",dueDate:"2026-02-06",total:505,paid:0,due:505,cat:"Commission",mo:"Jan"},
+  {contact:"Hana NAKATSUJI",invNum:"Refund-Hana NAKATSUJI",ref:"Refund-Hana NAKATSUJI",date:"2026-01-15",dueDate:"2026-02-12",total:498,paid:0,due:498,cat:"Refund",mo:"Jan"},
+  {contact:"AG-SOL EDU Pty Ltd",invNum:"INTCOMM-INV-B052982-N3W0-Carolain Yojana RUBIANO SOLORZANO-DECEC INST 5",ref:"INTCOMM-INV-B052982-N3W0-",date:"2026-01-08",dueDate:"2026-02-08",total:458,paid:0,due:458,cat:"Commission",mo:"Jan"},
+  {contact:"YOMIGO PTY Ltd",invNum:"ST - LG Group Lunch ",ref:"ST - LG Group Lunch ",date:"2026-02-25",dueDate:"2026-02-25",total:456,paid:0,due:456,cat:"OPEX",mo:"Feb"},
+  {contact:"Langports",invNum:"Cambridge Refund-INV-0245",ref:"Cambridge Refund-INV-0245",date:"2026-02-13",dueDate:"2026-02-27",total:450,paid:0,due:450,cat:"Refund",mo:"Feb"},
+  {contact:"AG-Fernandes Migration",invNum:"INTCOMM-INV-13354-Mayara FERREIRA DA SILVA-C3ECEC INST 5",ref:"INTCOMM-INV-13354-Mayara ",date:"2026-01-05",dueDate:"2026-02-05",total:449,paid:0,due:449,cat:"Commission",mo:"Jan"},
+  {contact:"AG-iKOKOS KOREA",invNum:"INTCOMM-INV-GGNM26010066-Yeonu PARK-YLC FULL",ref:"INTCOMM-INV-GGNM26010066-",date:"2026-02-06",dueDate:"2026-03-06",total:441,paid:0,due:441,cat:"Commission",mo:"Feb"},
+  {contact:"AG-Ausity Consulting",invNum:"INTCOMM-INV-0303260311-Zhanzhi DENG-PEP FULL",ref:"INTCOMM-INV-0303260311-Zh",date:"2026-02-10",dueDate:"2026-03-10",total:429,paid:0,due:429,cat:"Commission",mo:"Feb"},
+  {contact:"CBD College Pty Ltd",invNum:"Admin-INV-50569-Brisbane",ref:"Admin-INV-50569-Brisbane",date:"2026-02-05",dueDate:"2026-02-05",total:425,paid:0,due:425,cat:"OPEX",mo:"Feb"},
+  {contact:"AG-Dingoos Australia",invNum:"INTCOMM-INV-39393-Sue Angela DONOSO JARA-DCS INST 2",ref:"INTCOMM-INV-39393-Sue Ang",date:"2026-01-22",dueDate:"2026-02-22",total:421,paid:0,due:421,cat:"Commission",mo:"Jan"},
+  {contact:"AG-AVANTI EDUCATION AND MIGRATION PTY LT",invNum:"INTCOMM-INV-11598-Liley Heiddy DAVIS QUISPE-DECEC INST 3",ref:"INTCOMM-INV-11598-Liley H",date:"2026-01-23",dueDate:"2026-02-23",total:413,paid:0,due:413,cat:"Commission",mo:"Jan"},
+  {contact:"AG-OzTrip Services Pty Ltd",invNum:"INTCOMM-INV-2111-Jessica Natalia AYALA HENAO-DECEC INST 6",ref:"INTCOMM-INV-2111-Jessica ",date:"2026-01-19",dueDate:"2026-02-19",total:393,paid:0,due:393,cat:"Commission",mo:"Jan"},
+  {contact:"AG-Tagarela Intercambios",invNum:"INTCOMM-INV-14484-Igor MACEDO MACHADO-DIT INST 4",ref:"INTCOMM-INV-14484-Igor MA",date:"2026-01-20",dueDate:"2026-02-20",total:365,paid:0,due:365,cat:"Commission",mo:"Jan"},
+  {contact:"AG-Welcome Students Group",invNum:"INTCOMM-INV-16613-Carolina Belen REILOBA-DECEC INST 7",ref:"INTCOMM-INV-16613-Carolin",date:"2026-01-20",dueDate:"2026-02-20",total:347,paid:0,due:347,cat:"Commission",mo:"Jan"},
+  {contact:"AG-AVANTI EDUCATION AND MIGRATION PTY LT",invNum:"INTCOMM-INV-10594-Margarita Maria VELEZ SUAZA-DECEC INST 7",ref:"INTCOMM-INV-10594-Margari",date:"2026-01-15",dueDate:"2026-02-15",total:330,paid:0,due:330,cat:"Commission",mo:"Jan"},
+  {contact:"AG-Elite AUS Migration & Education Consu",invNum:"INTCOMM-INV-260176-Kang-Yu CHANG-C4KM INST 5",ref:"INTCOMM-INV-260176-Kang-Y",date:"2026-02-10",dueDate:"2026-03-10",total:330,paid:0,due:330,cat:"Commission",mo:"Feb"},
+  {contact:"AG-GAIA Life Project",invNum:"INTCOMM-INV-0534-Diego Sebastian GIMENEZ-DHM INST 15",ref:"INTCOMM-INV-0534-Diego Se",date:"2026-01-05",dueDate:"2026-02-05",total:300,paid:0,due:300,cat:"Commission",mo:"Jan"},
+  {contact:"AG-Dingoos Australia",invNum:"INTCOMM-INV-40740-Maria Fernanda YEPEZ TUFINO-C3IS INST 3",ref:"INTCOMM-INV-40740-Maria F",date:"2026-02-04",dueDate:"2026-03-04",total:275,paid:0,due:275,cat:"Commission",mo:"Feb"},
+  {contact:"AG-Hey Move Away",invNum:"INTCOMM-INV-B0337-13-Kaly RUBIO ANGELES-DIT INST 5",ref:"INTCOMM-INV-B0337-13-Kaly",date:"2026-01-27",dueDate:"2026-02-27",total:238,paid:0,due:238,cat:"Commission",mo:"Jan"},
+  {contact:"AG-Helpmate Student Agency",invNum:"INTCOMM-INV-0050-Natalia Hernandez Bedoya-C3ECEC INST 7",ref:"INTCOMM-INV-0050-Natalia ",date:"2026-01-28",dueDate:"2026-02-28",total:210,paid:0,due:210,cat:"Commission",mo:"Jan"},
+  {contact:"AG-Direction Australia",invNum:"INTCOMM-INV-26068-Luiggi Octavio CASTAGNETO ORE-DCS INST 1",ref:"INTCOMM-INV-26068-Luiggi ",date:"2026-01-19",dueDate:"2026-02-19",total:165,paid:0,due:165,cat:"Commission",mo:"Jan"},
+  {contact:"Miranda Su",invNum:"Reimbursement - Sydney Business Trips & Cambridge Feb 2026",ref:"Reimbursement - Sydney Bu",date:"2026-02-25",dueDate:"2026-02-25",total:131,paid:0,due:131,cat:"OPEX",mo:"Feb"},
+  {contact:"Study Tour Education Centre Australia",invNum:"Admin - Service Fee - Sophia trip reimbursement-Feb 2026 Hong Kong",ref:"Admin - Service Fee - Sop",date:"2026-03-02",dueDate:"2026-03-02",total:120,paid:0,due:120,cat:"Study Tour",mo:"Mar"},
+  {contact:"Amaysim",invNum:"Damon Telephones",ref:"Damon Telephones",date:"2026-03-02",dueDate:"2026-03-02",total:60,paid:0,due:60,cat:"OPEX",mo:"Mar"},
+  {contact:"AK Health Care",invNum:"BNE",ref:"BNE",date:"2026-03-03",dueDate:"2026-03-04",total:55,paid:0,due:55,cat:"OPEX",mo:"Mar"},
+  {contact:"CHATGPT",invNum:"Direct Debit",ref:"Direct Debit",date:"2026-03-02",dueDate:"2026-03-05",total:32,paid:0,due:32,cat:"OPEX",mo:"Mar"},
+  {contact:"Yidan Qin",invNum:"ST-Okayama Daianji-Welcome Coffee",ref:"ST-Okayama Daianji-Welcom",date:"2026-03-06",dueDate:"2026-03-06",total:30,paid:0,due:30,cat:"Study Tour",mo:"Mar"},
+  {contact:"Lebara",invNum:"Direct Debit",ref:"Direct Debit",date:"2026-01-24",dueDate:"2026-01-25",total:22,paid:0,due:22,cat:"OPEX",mo:"Jan"},
+  {contact:"Lebara",invNum:"Direct Debit",ref:"Direct Debit",date:"2026-02-24",dueDate:"2026-02-25",total:22,paid:0,due:22,cat:"OPEX",mo:"Feb"},
+];
+// === DATA END ===
 
-function fmt(n){if(n==null)return"-";var a=Math.abs(n);if(a>=1e6)return(n<0?"-":"")+"$"+(a/1e6).toFixed(2)+"M";if(a>=1e3)return(n<0?"-":"")+"$"+(a/1e3).toFixed(1)+"K";return(n<0?"-":"")+"$"+a.toFixed(0)}
-function fmtF(n){return "$"+Math.abs(n).toLocaleString("en-AU",{minimumFractionDigits:2,maximumFractionDigits:2})}
-function pct(n,t){return t===0?"0%":(n/t*100).toFixed(1)+"%"}
-var CC={OPEX:"#3B82F6",Commission:"#8B5CF6","Study Tour":"#06B6D4","Rent & Outgoing":"#F59E0B",Refund:"#F87171",Rent:"#F59E0B"};
+// ========== SHARED HELPERS ==========
+function fmt(n){return"$"+Math.abs(n).toLocaleString("en-AU",{minimumFractionDigits:0,maximumFractionDigits:0})}
+function fmtK(n){return"$"+Math.round(n/1000)+"K"}
+var RC=Recharts;
 
-function TT(p){
-  if(!p.active||!p.payload||!p.payload.length)return null;
-  return e("div",{style:{background:"#1E293B",border:"1px solid #475569",borderRadius:8,padding:"10px 14px"}},
-    e("div",{style:{color:"#F1F5F9",fontWeight:600,marginBottom:4,fontSize:13}},p.label),
-    p.payload.map(function(x,i){return e("div",{key:i,style:{color:x.color||"#94A3B8",fontSize:12,marginTop:2}},x.name+": "+fmtF(x.value))})
-  );
+// ========== SHARED COMPONENTS ==========
+function CatCard(props){
+  var c=props.c;var mx=props.mx||maxCat;var tot=props.tot||TOTAL_DEBT;
+  var barW=mx>0?(c.outstanding/mx*100):0;
+  var pct=tot>0?(c.outstanding/tot*100).toFixed(1):"0.0";
+  var sub=c.invoices?c.invoices+" invoices":c.source||"";
+  return e("div",{className:"card",style:{display:"flex",alignItems:"center",marginBottom:8,padding:"16px 20px"}},
+    e("div",{style:{display:"flex",alignItems:"center",gap:12,flex:1}},
+      e("div",{style:{width:4,height:44,borderRadius:2,background:c.color}}),
+      e("div",{style:{flex:1}},
+        e("div",{style:{display:"flex",justifyContent:"space-between",alignItems:"baseline"}},
+          e("div",{style:{fontWeight:600,fontSize:15,color:"#F1F5F9"}},c.name),
+          e("div",{style:{fontWeight:700,fontSize:22,color:c.outstanding>0?"#F87171":"#475569"}},c.outstanding>0?fmt(c.outstanding):"TBC")
+        ),
+        e("div",{style:{display:"flex",gap:16,marginTop:4,fontSize:11,color:"#64748B"}},
+          e("span",null,sub),
+          c.outstanding>0?e("span",null,pct+"% of total"):e("span",{style:{color:"#FBBF24"}},"Awaiting data")
+        ),
+        c.outstanding>0?e("div",{className:"pbar",style:{marginTop:6}},e("div",{className:"pfill",style:{width:Math.max(barW,1)+"%",background:c.color}})):null
+      )
+    )
+  )
 }
 
-function OverviewTab(){
-  var pd=CATS.map(function(c){return{name:c.name,value:c.net}});
+// ========== TAB 1: DEBT MANAGEMENT ==========
+function DebtTab(){
   return e("div",null,
-    e("div",{className:"grid grid-4",style:{marginBottom:20}},
-      e("div",{className:"card"},e("div",{className:"card-title"},"Adjusted AP Balance"),e("div",{className:"card-value blue"},fmt(ADJ)),e("div",{className:"card-sub"},"Excl. $1.35M long-term debt")),
-      e("div",{className:"card"},e("div",{className:"card-title"},"New Payables (9mo)"),e("div",{className:"card-value red"},fmt(TC)),e("div",{className:"card-sub"},"Jul 2025 - Mar 2026")),
-      e("div",{className:"card"},e("div",{className:"card-title"},"Payments Made"),e("div",{className:"card-value green"},fmt(TD)),e("div",{className:"card-sub"},"Payment rate: "+pct(TD,TC))),
-      e("div",{className:"card"},e("div",{className:"card-title"},"Suppliers / Txns"),e("div",{className:"card-value amber"},"1,153"),e("div",{className:"card-sub"},"5,941 transactions"))
-    ),
-    e("div",{className:"grid grid-2"},
-      e("div",{className:"card"},
-        e("div",{className:"card-title"},"Net Outstanding by Category"),
-        e(ResponsiveContainer,{width:"100%",height:300},
-          e(PieChart,null,
-            e(Pie,{data:pd,cx:"50%",cy:"50%",innerRadius:60,outerRadius:110,paddingAngle:2,dataKey:"value",
-              label:function(d){return d.name+" "+((d.percent*100).toFixed(1))+"%"}},
-              pd.map(function(_,i){return e(Cell,{key:i,fill:CATS[i].color})})
-            ),e(Tooltip,{content:TT})
-          )
-        )
-      ),
-      e("div",{className:"card"},
-        e("div",{className:"card-title"},"Category Breakdown"),
-        e("table",null,
-          e("thead",null,e("tr",null,e("th",null,"Category"),e("th",{className:"text-right"},"Credit"),e("th",{className:"text-right"},"Debit"),e("th",{className:"text-right"},"Net"),e("th",{className:"text-right"},"Paid %"))),
-          e("tbody",null,
-            CATS.map(function(c,i){return e("tr",{key:i},
-              e("td",null,e("span",{style:{display:"inline-block",width:10,height:10,borderRadius:2,background:c.color,marginRight:8}}),c.name),
-              e("td",{className:"text-right"},fmt(c.credit)),e("td",{className:"text-right"},fmt(c.debit)),
-              e("td",{className:"text-right",style:{fontWeight:600,color:"#F87171"}},fmt(c.net)),
-              e("td",{className:"text-right"},e("div",{style:{display:"flex",alignItems:"center",justifyContent:"flex-end",gap:8}},
-                e("div",{className:"pct-bar",style:{width:60}},e("div",{className:"pct-fill",style:{width:pct(c.debit,c.credit),background:c.color}})),pct(c.debit,c.credit)))
-            )}),
-            e("tr",{style:{borderTop:"2px solid #475569"}},e("td",{style:{fontWeight:700}},"TOTAL"),e("td",{className:"text-right",style:{fontWeight:700}},fmt(TC)),e("td",{className:"text-right",style:{fontWeight:700}},fmt(TD)),e("td",{className:"text-right",style:{fontWeight:700,color:"#F87171"}},fmt(TN)),e("td",{className:"text-right",style:{fontWeight:700}},pct(TD,TC)))
-          )
+    e("div",{className:"card",style:{textAlign:"center",padding:"32px 20px",marginBottom:16}},
+      e("div",{className:"ct",style:{fontSize:13,letterSpacing:1}},"PRE-2026 TOTAL DEBT OUTSTANDING"),
+      e("div",{className:"cv red",style:{fontSize:48,margin:"8px 0"}},fmt(TOTAL_DEBT)),
+      e("div",{style:{fontSize:13,color:"#94A3B8",marginBottom:12}},"8 categories (5 Trade Payable + 3 Statutory)"),
+      e("div",{style:{display:"flex",justifyContent:"center",gap:32,marginTop:8}},
+        e("div",{style:{textAlign:"center",padding:"8px 16px",background:"rgba(30,41,59,0.6)",borderRadius:8}},
+          e("div",{style:{fontSize:11,color:"#64748B"}},"LT Property Debt"),
+          e("div",{style:{fontSize:16,fontWeight:700,color:"#94A3B8"}},fmt(LT_DEBT)),
+          e("div",{style:{fontSize:10,color:"#64748B"}},"Burgundy, Colliers, Coastal, Harcourts, QStaff")
+        ),
+        e("div",{style:{textAlign:"center",padding:"8px 16px",background:"rgba(30,41,59,0.6)",borderRadius:8}},
+          e("div",{style:{fontSize:11,color:"#64748B"}},"Under Investigation"),
+          e("div",{style:{fontSize:16,fontWeight:700,color:"#FBBF24"}},fmt(INVESTIGATE)),
+          e("div",{style:{fontSize:10,color:"#64748B"}},"2 items pending review")
         )
       )
     ),
-    e("div",{className:"note"},"Long-term debt excluded: Burgundy $1.02M | Colliers (Rent) $273K | Coastal $53K"),
-    e("div",{className:"section-title",style:{marginTop:24}},"Monthly New Payables vs Payments"),
-    e("div",{className:"card"},
-      e(ResponsiveContainer,{width:"100%",height:320},
-        e(ComposedChart,{data:MCD},
-          e(CartesianGrid,{strokeDasharray:"3 3",stroke:"#334155"}),
-          e(XAxis,{dataKey:"month",tick:{fill:"#94A3B8",fontSize:12}}),
-          e(YAxis,{tick:{fill:"#94A3B8",fontSize:12},tickFormatter:function(v){return fmt(v)}}),
-          e(Tooltip,{content:TT}),
-          e(Bar,{dataKey:"credit",fill:"#F87171",name:"New Payables",radius:[4,4,0,0],barSize:28}),
-          e(Bar,{dataKey:"debit",fill:"#34D399",name:"Payments",radius:[4,4,0,0],barSize:28})
-        )
+    e("div",{className:"st",style:{marginBottom:12}},"Trade Payable",e("span",{className:"badge b-red",style:{marginLeft:8}},"AP Ledger")),
+    CATS.map(function(c,i){return e(CatCard,{key:"tp"+i,c:c})}),
+    e("div",{className:"card",style:{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"16px 20px",marginTop:4,background:"rgba(30,41,59,0.6)"}},
+      e("div",{style:{fontWeight:700,fontSize:14,color:"#94A3B8",textTransform:"uppercase",letterSpacing:.5}},"Trade Payable Subtotal ("+TRADE_INVOICES+" invoices)"),
+      e("div",{style:{fontWeight:700,fontSize:24,color:"#F87171"}},fmt(TRADE_PAYABLE))
+    ),
+    e("div",{className:"st",style:{marginBottom:12}},"Statutory Debt",e("span",{className:"badge b-amber",style:{marginLeft:8}},"Outside AP")),
+    EXTRA_DEBT.map(function(c,i){return e(CatCard,{key:"ed"+i,c:c})}),
+    e("div",{className:"st",style:{marginTop:8,marginBottom:12}},"Pre-2026 Debt Clearance",e("span",{className:"badge b-green",style:{marginLeft:8}},"2026 YTD")),
+    e("div",{className:"grid g3",style:{marginBottom:12}},
+      e("div",{className:"card",style:{textAlign:"center"}},
+        e("div",{className:"ct"},"TOTAL CLEARED"),
+        e("div",{className:"cv green",style:{fontSize:32}},fmt(CLEAR_TOTAL+STAT_CLEAR_TOTAL)),
+        e("div",{className:"cs"},"of "+fmt(CLEAR_START+STAT_CLEAR_START)+" starting debt (Dec 25)")
       ),
-      e("div",{className:"legend-row"},
-        e("div",{className:"legend-item"},e("div",{className:"legend-dot",style:{background:"#F87171"}}),"New Payables"),
-        e("div",{className:"legend-item"},e("div",{className:"legend-dot",style:{background:"#34D399"}}),"Payments Made"))
+      e("div",{className:"card",style:{textAlign:"center"}},
+        e("div",{className:"ct"},"CLEARANCE RATE"),
+        e("div",{className:"cv blue",style:{fontSize:32}},((CLEAR_TOTAL+STAT_CLEAR_TOTAL)/(CLEAR_START+STAT_CLEAR_START)*100).toFixed(1)+"%"),
+        e("div",{className:"cs"},"Jan \u2014 Mar 2026")
+      ),
+      e("div",{className:"card",style:{textAlign:"center"}},
+        e("div",{className:"ct"},"REMAINING PRE-2026 DEBT"),
+        e("div",{className:"cv red",style:{fontSize:32}},fmt(CLEAR_START+STAT_CLEAR_START-CLEAR_TOTAL-STAT_CLEAR_TOTAL)),
+        e("div",{className:"cs"},((CLEAR_START+STAT_CLEAR_START-CLEAR_TOTAL-STAT_CLEAR_TOTAL)/(CLEAR_START+STAT_CLEAR_START)*100).toFixed(1)+"% still outstanding")
+      )
+    ),
+    e(OverallClearanceChart,null),
+    e("div",{className:"st",style:{marginTop:16,marginBottom:12}},"Trade AP Clearance",e("span",{className:"badge b-blue",style:{marginLeft:8}},"Reference-Matched")),
+    e(DebtClearanceTable,null),
+    e(DebtCatClearanceTable,null),
+    e("div",{className:"st",style:{marginTop:16,marginBottom:12}},"Statutory Clearance",e("span",{className:"badge b-amber",style:{marginLeft:8}},"ATO + Super + Payroll Tax")),
+    e(StatClearanceTable,null),
+    e("div",{className:"note",style:{marginTop:16}},
+      "Source: Xero Invoices API (BNE only). Methodology: ACCPAY invoices, Date<2026, Status=AUTHORISED. SYD + intercompany excluded to avoid double-counting. LT Property Debt ($1,599K) includes Burgundy, Colliers, Coastal, Harcourts, Qld Staff Hire. Investigate ($47K) excluded pending review."
+    ),
+    e("div",{className:"note warn",style:{marginTop:8}},
+      "\u26A0\uFE0F METRODRY Alert: 8 invoices totalling ~$47K overdue 18+ months within OPEX category. Requires immediate attention."
     )
   );
 }
 
-function MonthlyTab(){
-  var cats=["OPEX","Commission","Study Tour","Rent & Outgoing","Refund"];
-  var cum=963770.3-LTD;
-  var cumData=MCD.map(function(m){cum+=(m.credit-m.debit);return{month:m.month,balance:Math.round(cum)}});
-  return e("div",null,
-    e("div",{className:"section-title"},"Net Outstanding Trend by Category"),
-    e("div",{className:"card"},
-      e(ResponsiveContainer,{width:"100%",height:380},
-        e(BarChart,{data:MT,stackOffset:"sign"},
-          e(CartesianGrid,{strokeDasharray:"3 3",stroke:"#334155"}),
-          e(XAxis,{dataKey:"month",tick:{fill:"#94A3B8",fontSize:12}}),
-          e(YAxis,{tick:{fill:"#94A3B8",fontSize:12},tickFormatter:function(v){return fmt(v)}}),
-          e(Tooltip,{content:TT}),
-          cats.map(function(c){return e(Bar,{key:c,dataKey:c,stackId:"a",fill:CC[c]})})
-        )
-      ),
-      e("div",{className:"legend-row"},cats.map(function(c){return e("div",{key:c,className:"legend-item"},e("div",{className:"legend-dot",style:{background:CC[c]}}),c)}))
-    ),
-    e("div",{className:"note"},"Negative = net paydown. Sep/Oct/Dec Rent spikes include LT Debt invoices (to be refined in Phase 2)."),
-    e("div",{className:"section-title",style:{marginTop:24}},"Monthly Detail"),
-    e("div",{className:"card",style:{overflowX:"auto"}},
-      e("table",null,
-        e("thead",null,e("tr",null,e("th",null,"Month"),cats.map(function(c){return e("th",{key:c,className:"text-right"},c)}),e("th",{className:"text-right"},"Total"))),
-        e("tbody",null,MT.map(function(r,i){
-          var t=cats.reduce(function(s,c){return s+(r[c]||0)},0);
-          return e("tr",{key:i},e("td",{style:{fontWeight:500}},r.month),
-            cats.map(function(c){return e("td",{key:c,className:"text-right",style:{color:r[c]<0?"#34D399":r[c]>50000?"#F87171":"#CBD5E1"}},fmt(r[c]))}),
-            e("td",{className:"text-right",style:{fontWeight:700,color:t<0?"#34D399":"#F87171"}},fmt(t)));
-        }))
-      )
-    ),
-    e("div",{className:"section-title",style:{marginTop:24}},"Cumulative AP Balance (Excl. LT Debt)"),
-    e("div",{className:"card"},
-      e(ResponsiveContainer,{width:"100%",height:280},
-        e(AreaChart,{data:cumData},
-          e(CartesianGrid,{strokeDasharray:"3 3",stroke:"#334155"}),
-          e(XAxis,{dataKey:"month",tick:{fill:"#94A3B8",fontSize:12}}),
-          e(YAxis,{tick:{fill:"#94A3B8",fontSize:12},tickFormatter:function(v){return fmt(v)}}),
-          e(Tooltip,{content:TT}),
-          e(Area,{dataKey:"balance",stroke:"#3B82F6",fill:"rgba(59,130,246,0.15)",strokeWidth:2,name:"AP Balance"})
-        )
+function OverallClearanceChart(){
+  var totalStart=CLEAR_START+STAT_CLEAR_START;
+  var months=["Jan","Feb","Mar"];
+  var keys=["jan","feb","mar"];
+  var data=[{name:"Dec 25",Remaining:totalStart}];
+  var cumTrade=0,cumStat=0;
+  months.forEach(function(mo,i){
+    cumTrade+=(CLEARANCE[i]?CLEARANCE[i].cleared:0);
+    var statMo=0;
+    STAT_CLEARANCE.forEach(function(c){statMo+=c[keys[i]]});
+    cumStat+=statMo;
+    data.push({name:mo+" 26"+(i===2?"*":""),Remaining:totalStart-cumTrade-cumStat});
+  });
+  var minVal=data[data.length-1].Remaining;
+  var yMin=Math.floor(minVal/100000)*100000;
+  var yMax=Math.ceil(totalStart/100000)*100000;
+  return e("div",{className:"card",style:{padding:"20px 16px"}},
+    e(RC.ResponsiveContainer,{width:"100%",height:280},
+      e(RC.AreaChart,{data:data,margin:{top:10,right:20,left:20,bottom:5}},
+        e(RC.CartesianGrid,{strokeDasharray:"3 3",stroke:"#1E293B"}),
+        e(RC.XAxis,{dataKey:"name",tick:{fill:"#94A3B8",fontSize:12},axisLine:{stroke:"#334155"}}),
+        e(RC.YAxis,{domain:[yMin,yMax],tick:{fill:"#94A3B8",fontSize:11},axisLine:{stroke:"#334155"},tickFormatter:function(v){return"$"+(v/1000000).toFixed(1)+"M"}}),
+        e(RC.Tooltip,{contentStyle:{background:"#1E293B",border:"1px solid #334155",borderRadius:8,fontSize:12},labelStyle:{color:"#F8FAFC"},formatter:function(v){return["$"+v.toLocaleString("en-AU"),"Remaining Debt"]}}),
+        e("defs",null,e("linearGradient",{id:"remGrad",x1:0,y1:0,x2:0,y2:1},e("stop",{offset:"5%",stopColor:"#F87171",stopOpacity:0.3}),e("stop",{offset:"95%",stopColor:"#F87171",stopOpacity:0.02}))),
+        e(RC.Area,{type:"monotone",dataKey:"Remaining",stroke:"#F87171",strokeWidth:3,fill:"url(#remGrad)",dot:{fill:"#F87171",stroke:"#0B1120",strokeWidth:2,r:6},activeDot:{r:8}})
       )
     )
   );
 }
 
-function RentTab(){
-  return e("div",null,
-    e("div",{className:"grid grid-3",style:{marginBottom:20}},
-      e("div",{className:"card"},e("div",{className:"card-title"},"True Rent Payable"),e("div",{className:"card-value green"},fmt(40723.47)),e("div",{className:"card-sub"},"Utilities + outgoings only")),
-      e("div",{className:"card"},e("div",{className:"card-title"},"Long-Term Debt (Isolated)"),e("div",{className:"card-value",style:{color:"#64748B"}},fmt(LTT)),e("div",{className:"card-sub"},"Property leases excluded")),
-      e("div",{className:"card"},e("div",{className:"card-title"},"Rent Payment Rate"),e("div",{className:"card-value green"},"81.8%"),e("div",{className:"card-sub"},"$184K paid of $225K invoiced"))
-    ),
-    e("div",{className:"section-title"},"True Rent & Outgoing Payable ",e("span",{className:"badge badge-green"},"TRADE AP")),
-    e("div",{className:"card"},
-      e("table",null,
-        e("thead",null,e("tr",null,e("th",null,"Supplier"),e("th",{className:"text-right"},"Invoiced"),e("th",{className:"text-right"},"Paid"),e("th",{className:"text-right"},"Outstanding"),e("th",{className:"text-right"},"Status"))),
-        e("tbody",null,RP.map(function(r,i){return e("tr",{key:i},
-          e("td",null,r.name),e("td",{className:"text-right"},fmtF(r.credit)),e("td",{className:"text-right"},fmtF(r.paid)),
-          e("td",{className:"text-right",style:{fontWeight:600,color:r.net>0?"#FBBF24":"#34D399"}},fmt(r.net)),
-          e("td",{className:"text-right"},r.net<=0?e("span",{className:"badge badge-green"},"CLEAR"):r.net<5000?e("span",{className:"badge badge-amber"},"LOW"):e("span",{className:"badge badge-red"},"OUTSTANDING"))
-        )}))
-      )
-    ),
-    e("div",{className:"section-title",style:{marginTop:24}},"Long-Term Debt (Reference Only) ",e("span",{className:"badge badge-blue"},"NON-CURRENT")),
-    e("div",{className:"card",style:{opacity:.7}},
-      e("table",null,
-        e("thead",null,e("tr",null,e("th",null,"Property Lease"),e("th",{className:"text-right"},"Invoiced"),e("th",{className:"text-right"},"Paid"),e("th",{className:"text-right"},"Outstanding"))),
-        e("tbody",null,
-          LTI.map(function(r,i){return e("tr",{key:i},e("td",null,r.name),e("td",{className:"text-right"},fmtF(r.credit)),e("td",{className:"text-right"},fmtF(r.paid)),e("td",{className:"text-right",style:{color:"#64748B"}},fmt(r.net)))}),
-          e("tr",{style:{borderTop:"2px solid #475569"}},e("td",{style:{fontWeight:700}},"Total LT Debt"),e("td"),e("td"),e("td",{className:"text-right",style:{fontWeight:700,color:"#64748B"}},fmt(LTT)))
-        )
-      ),
-      e("div",{className:"note",style:{marginTop:12,borderLeftColor:"#64748B"}},"Property lease obligations = non-current liabilities. Excluded from all AP metrics.")
-    )
-  );
-}
-
-function SuppliersTab(){
-  return e("div",null,
-    e("div",{className:"section-title"},"Top 15 Suppliers by Net Outstanding ",e("span",{className:"badge badge-blue"},"EXCL. LT DEBT")),
-    e("div",{className:"card"},
-      e(ResponsiveContainer,{width:"100%",height:440},
-        e(BarChart,{data:TS,layout:"vertical",margin:{left:130}},
-          e(CartesianGrid,{strokeDasharray:"3 3",stroke:"#334155",horizontal:false}),
-          e(XAxis,{type:"number",tick:{fill:"#94A3B8",fontSize:12},tickFormatter:function(v){return fmt(v)}}),
-          e(YAxis,{type:"category",dataKey:"name",tick:{fill:"#CBD5E1",fontSize:11},width:120}),
-          e(Tooltip,{content:TT}),
-          e(Bar,{dataKey:"net",name:"Net Outstanding",radius:[0,4,4,0],barSize:18},
-            TS.map(function(s,i){return e(Cell,{key:i,fill:CC[s.cat]||"#3B82F6"})})
-          )
-        )
-      ),
-      e("div",{className:"legend-row"},["OPEX","Study Tour","Rent"].map(function(c){return e("div",{key:c,className:"legend-item"},e("div",{className:"legend-dot",style:{background:CC[c]}}),c)}))
-    ),
-    e("div",{className:"section-title",style:{marginTop:24}},"Supplier Detail"),
-    e("div",{className:"card",style:{overflowX:"auto"}},
-      e("table",null,
-        e("thead",null,e("tr",null,e("th",null,"#"),e("th",null,"Supplier"),e("th",null,"Category"),e("th",{className:"text-right"},"Invoiced"),e("th",{className:"text-right"},"Outstanding"),e("th",{className:"text-center"},"Txns"),e("th",null,"Concentration"))),
-        e("tbody",null,TS.map(function(s,i){
-          var cp=s.net/TN*100;
+function DebtClearanceTable(){
+  return e("div",{className:"card",style:{padding:0,marginTop:8,overflow:"hidden"}},
+    e("table",null,
+      e("thead",null,e("tr",null,e("th",null,"Month"),e("th",{className:"tr"},"Cleared"),e("th",{className:"tr"},"Cumulative"),e("th",{className:"tr"},"Remaining"),e("th",{className:"tr"},"% Cleared"))),
+      e("tbody",null,
+        CLEARANCE.map(function(c,i){
           return e("tr",{key:i},
-            e("td",{style:{color:"#64748B"}},i+1),e("td",{style:{fontWeight:500}},s.name),
-            e("td",null,e("span",{className:"badge badge-"+(s.cat==="OPEX"?"blue":s.cat==="Rent"?"amber":"green")},s.cat)),
-            e("td",{className:"text-right"},fmtF(s.credit)),
-            e("td",{className:"text-right",style:{fontWeight:600,color:"#F87171"}},fmt(s.net)),
-            e("td",{className:"text-center"},s.count),
-            e("td",null,e("div",{style:{display:"flex",alignItems:"center",gap:8}},
-              e("div",{className:"pct-bar",style:{width:80}},e("div",{className:"pct-fill",style:{width:Math.min(cp,100)+"%",background:cp>20?"#F87171":cp>10?"#FBBF24":"#3B82F6"}})),
-              e("span",{style:{fontSize:12,color:"#94A3B8"}},cp.toFixed(1)+"%")
-            ))
-          );
-        }))
+            e("td",null,c.label,c.partial?e("span",{style:{fontSize:10,color:"#64748B",marginLeft:4}},"partial"):""),
+            e("td",{className:"tr",style:{color:"#34D399",fontWeight:600}},fmt(c.cleared)),
+            e("td",{className:"tr",style:{color:"#34D399"}},fmt(c.cumCleared)),
+            e("td",{className:"tr",style:{color:"#F87171",fontWeight:700}},fmt(c.remaining)),
+            e("td",{className:"tr",style:{color:"#60A5FA",fontWeight:600}},(c.cumCleared/CLEAR_START*100).toFixed(1)+"%")
+          )
+        }),
+        e("tr",{style:{background:"rgba(30,41,59,0.6)"}},
+          e("td",{style:{fontWeight:700,color:"#94A3B8"}},"TOTAL"),
+          e("td",{className:"tr",style:{fontWeight:700,color:"#34D399"}},fmt(CLEAR_TOTAL)),
+          e("td",null,""),
+          e("td",{className:"tr",style:{fontWeight:700,color:"#F87171"}},fmt(CLEAR_START-CLEAR_TOTAL)),
+          e("td",{className:"tr",style:{fontWeight:700,color:"#60A5FA"}},(CLEAR_TOTAL/CLEAR_START*100).toFixed(1)+"%")
+        )
       )
-    ),
-    e("div",{className:"note"},"Concentration: Top 3 = "+((TS.slice(0,3).reduce(function(s,x){return s+x.net},0)/TN*100).toFixed(1))+"%. Shafston Sydney ($494K) is intercompany.")
+    )
   );
 }
 
-function App(){
-  var ref=React.useState(0);var tab=ref[0];var setTab=ref[1];
-  var tabs=["Overview","Monthly Trend","Rent Analysis","Top Suppliers"];
-  var panels=[OverviewTab,MonthlyTab,RentTab,SuppliersTab];
-  return e("div",{className:"app"},
-    e("div",{className:"header"},e("h1",null,"Shafston Accounts Payable Dashboard"),e("div",{className:"subtitle"},"Shafston International Pty Ltd | Jul 2025 - Mar 2026 | Excluding Long-Term Debt")),
-    e("div",{className:"tabs"},tabs.map(function(t,i){return e("div",{key:i,className:"tab"+(tab===i?" active":""),onClick:function(){setTab(i)}},t)})),
-    e(panels[tab])
+function DebtCatClearanceTable(){
+  return e("div",{className:"card",style:{padding:0,overflow:"hidden"}},
+    e("table",null,
+      e("thead",null,e("tr",null,e("th",null,"Category"),e("th",{className:"tr"},"Starting"),e("th",{className:"tr"},"Jan"),e("th",{className:"tr"},"Feb"),e("th",{className:"tr"},"Mar"),e("th",{className:"tr"},"Total Cleared"),e("th",{className:"tr"},"Remaining"),e("th",{className:"tr"},"% Cleared"))),
+      e("tbody",null,
+        CAT_CLEARANCE.map(function(c,i){
+          var pct=(c.total/c.start*100).toFixed(1);
+          return e("tr",{key:i},
+            e("td",null,e("span",{style:{display:"inline-block",width:8,height:8,borderRadius:2,background:c.color,marginRight:8}}),c.name),
+            e("td",{className:"tr",style:{color:"#94A3B8"}},fmtK(c.start)),
+            e("td",{className:"tr",style:{color:c.jan>0?"#34D399":"#475569"}},c.jan>0?fmt(c.jan):"\u2014"),
+            e("td",{className:"tr",style:{color:c.feb>0?"#34D399":"#475569"}},c.feb>0?fmt(c.feb):"\u2014"),
+            e("td",{className:"tr",style:{color:c.mar>0?"#34D399":"#475569"}},c.mar>0?fmt(c.mar):"\u2014"),
+            e("td",{className:"tr",style:{color:"#34D399",fontWeight:600}},fmt(c.total)),
+            e("td",{className:"tr",style:{color:"#F87171",fontWeight:600}},c.remaining>1000?fmtK(c.remaining):fmt(c.remaining)),
+            e("td",{className:"tr"},e("div",{style:{display:"flex",alignItems:"center",justifyContent:"flex-end",gap:8}},
+              e("div",{className:"pbar",style:{width:60}},e("div",{className:"pfill",style:{width:Math.min(pct,100)+"%",background:c.color}})),
+              e("span",{style:{fontSize:12,color:"#60A5FA",fontWeight:500,minWidth:36,textAlign:"right"}},pct+"%")
+            ))
+          )
+        }),
+        e("tr",{style:{background:"rgba(30,41,59,0.6)"}},
+          e("td",{style:{fontWeight:700,color:"#94A3B8"}},"TOTAL"),
+          e("td",{className:"tr",style:{fontWeight:700,color:"#94A3B8"}},fmtK(CLEAR_START)),
+          e("td",{className:"tr",style:{fontWeight:700,color:"#34D399"}},fmt(CLEARANCE[0].cleared)),
+          e("td",{className:"tr",style:{fontWeight:700,color:"#34D399"}},fmt(CLEARANCE[1].cleared)),
+          e("td",{className:"tr",style:{fontWeight:700,color:"#34D399"}},fmt(CLEARANCE[2].cleared)),
+          e("td",{className:"tr",style:{fontWeight:700,color:"#34D399"}},fmt(CLEAR_TOTAL)),
+          e("td",{className:"tr",style:{fontWeight:700,color:"#F87171"}},fmtK(TRADE_PAYABLE)),
+          e("td",{className:"tr",style:{fontWeight:700,color:"#60A5FA"}},(CLEAR_TOTAL/CLEAR_START*100).toFixed(1)+"%")
+        )
+      )
+    )
   );
 }
-ReactDOM.createRoot(document.getElementById("root")).render(e(App));
+
+function StatClearanceTable(){
+  var janT=0,febT=0,marT=0;
+  STAT_CLEARANCE.forEach(function(c){janT+=c.jan;febT+=c.feb;marT+=c.mar});
+  return e("div",{className:"card",style:{padding:0,overflow:"hidden"}},
+    e("table",null,
+      e("thead",null,e("tr",null,e("th",null,"Statutory Item"),e("th",{className:"tr"},"Opening"),e("th",{className:"tr"},"Jan"),e("th",{className:"tr"},"Feb"),e("th",{className:"tr"},"Mar"),e("th",{className:"tr"},"Total Cleared"),e("th",{className:"tr"},"Remaining"),e("th",{className:"tr"},"% Cleared"))),
+      e("tbody",null,
+        STAT_CLEARANCE.map(function(c,i){
+          var pct=c.start>0?(c.total/c.start*100).toFixed(1):"0.0";
+          return e("tr",{key:i},
+            e("td",null,e("span",{style:{display:"inline-block",width:8,height:8,borderRadius:2,background:c.color,marginRight:8}}),c.name),
+            e("td",{className:"tr",style:{color:"#94A3B8"}},fmtK(c.start)),
+            e("td",{className:"tr",style:{color:c.jan>0?"#34D399":"#475569"}},c.jan>0?fmt(c.jan):"\u2014"),
+            e("td",{className:"tr",style:{color:c.feb>0?"#34D399":"#475569"}},c.feb>0?fmt(c.feb):"\u2014"),
+            e("td",{className:"tr",style:{color:c.mar>0?"#34D399":"#475569"}},c.mar>0?fmt(c.mar):"\u2014"),
+            e("td",{className:"tr",style:{color:"#34D399",fontWeight:600}},fmt(c.total)),
+            e("td",{className:"tr",style:{color:"#F87171",fontWeight:600}},fmtK(c.remaining)),
+            e("td",{className:"tr"},e("div",{style:{display:"flex",alignItems:"center",justifyContent:"flex-end",gap:8}},
+              e("div",{className:"pbar",style:{width:60}},e("div",{className:"pfill",style:{width:Math.min(pct,100)+"%",background:c.color}})),
+              e("span",{style:{fontSize:12,color:"#60A5FA",fontWeight:500,minWidth:36,textAlign:"right"}},pct+"%")
+            ))
+          )
+        }),
+        e("tr",{style:{background:"rgba(30,41,59,0.6)"}},
+          e("td",{style:{fontWeight:700,color:"#94A3B8"}},"TOTAL"),
+          e("td",{className:"tr",style:{fontWeight:700,color:"#94A3B8"}},fmtK(STAT_CLEAR_START)),
+          e("td",{className:"tr",style:{fontWeight:700,color:"#34D399"}},janT>0?fmt(janT):"\u2014"),
+          e("td",{className:"tr",style:{fontWeight:700,color:"#34D399"}},febT>0?fmt(febT):"\u2014"),
+          e("td",{className:"tr",style:{fontWeight:700,color:"#34D399"}},marT>0?fmt(marT):"\u2014"),
+          e("td",{className:"tr",style:{fontWeight:700,color:"#34D399"}},fmt(STAT_CLEAR_TOTAL)),
+          e("td",{className:"tr",style:{fontWeight:700,color:"#F87171"}},fmtK(STAT_CLEAR_START-STAT_CLEAR_TOTAL)),
+          e("td",{className:"tr",style:{fontWeight:700,color:"#60A5FA"}},(STAT_CLEAR_TOTAL/STAT_CLEAR_START*100).toFixed(1)+"%")
+        )
+      )
+    )
+  );
+}
+
+function UnpaidListSection(){
+  var filterState=useState("All");
+  var filter=filterState[0];
+  var setFilter=filterState[1];
+  var catFilterState=useState("All");
+  var catFilter=catFilterState[0];
+  var setCatFilter=catFilterState[1];
+  var months=["All","Jan","Feb","Mar"];
+  var cats=["All"];
+  PAY_UNPAID.forEach(function(inv){if(cats.indexOf(inv.cat)===-1)cats.push(inv.cat)});
+  var filtered=PAY_UNPAID.filter(function(inv){
+    if(filter!=="All"&&inv.mo!==filter)return false;
+    if(catFilter!=="All"&&inv.cat!==catFilter)return false;
+    return true;
+  });
+  var totalDue=filtered.reduce(function(s,inv){return s+inv.due},0);
+  var catColors={"OPEX":"#3B82F6","Study Tour":"#06B6D4","Rent & Outgoing":"#F59E0B","Refund":"#F87171","Commission":"#8B5CF6"};
+  return e("div",null,
+    e("div",{style:{display:"flex",alignItems:"center",justifyContent:"space-between",flexWrap:"wrap",gap:12,marginBottom:12}},
+      e("div",{style:{display:"flex",gap:4,flexWrap:"wrap"}},
+        months.map(function(mo){
+          var cnt=mo==="All"?PAY_UNPAID.length:PAY_UNPAID.filter(function(inv){return inv.mo===mo}).length;
+          return e("div",{key:mo,onClick:function(){setFilter(mo)},
+            style:{padding:"6px 14px",borderRadius:6,cursor:"pointer",fontSize:12,fontWeight:500,
+              background:filter===mo?"#3B82F6":"#1E293B",color:filter===mo?"#FFF":"#94A3B8",
+              border:"1px solid "+(filter===mo?"#3B82F6":"#334155"),transition:"all .2s"}
+          },mo+" ("+cnt+")")
+        })
+      ),
+      e("div",{style:{display:"flex",gap:4,flexWrap:"wrap"}},
+        cats.map(function(c){
+          return e("div",{key:c,onClick:function(){setCatFilter(c)},
+            style:{padding:"6px 12px",borderRadius:6,cursor:"pointer",fontSize:11,fontWeight:500,
+              background:catFilter===c?"#334155":"#1E293B",color:catFilter===c?"#F1F5F9":"#64748B",
+              border:"1px solid "+(catFilter===c?"#475569":"#334155"),transition:"all .2s"}
+          },c)
+        })
+      )
+    ),
+    e("div",{style:{display:"flex",gap:12,marginBottom:12,fontSize:13}},
+      e("span",{style:{color:"#94A3B8"}},filtered.length+" invoices"),
+      e("span",{style:{color:"#F87171",fontWeight:600}},"Total: "+fmt(totalDue))
+    ),
+    e("div",{className:"card",style:{padding:0,overflow:"auto",maxHeight:500}},
+      e("table",null,
+        e("thead",null,e("tr",null,
+          e("th",{style:{position:"sticky",top:0,background:"#1E293B",zIndex:1}},"#"),
+          e("th",{style:{position:"sticky",top:0,background:"#1E293B",zIndex:1}},"Contact"),
+          e("th",{style:{position:"sticky",top:0,background:"#1E293B",zIndex:1}},"Invoice"),
+          e("th",{style:{position:"sticky",top:0,background:"#1E293B",zIndex:1}},"Category"),
+          e("th",{className:"tr",style:{position:"sticky",top:0,background:"#1E293B",zIndex:1}},"Inv Date"),
+          e("th",{className:"tr",style:{position:"sticky",top:0,background:"#1E293B",zIndex:1}},"Due Date"),
+          e("th",{className:"tr",style:{position:"sticky",top:0,background:"#1E293B",zIndex:1}},"Total"),
+          e("th",{className:"tr",style:{position:"sticky",top:0,background:"#1E293B",zIndex:1}},"Due")
+        )),
+        e("tbody",null,
+          filtered.map(function(inv,i){
+            var catColor=catColors[inv.cat]||"#64748B";
+            return e("tr",{key:i},
+              e("td",{style:{color:"#475569",fontSize:11}},i+1),
+              e("td",{style:{fontSize:12,maxWidth:200,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}},inv.contact),
+              e("td",{style:{fontSize:11,maxWidth:220,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",color:"#94A3B8"}},inv.invNum),
+              e("td",null,e("span",{style:{display:"inline-block",padding:"2px 8px",borderRadius:4,fontSize:10,fontWeight:600,background:catColor+"20",color:catColor}},inv.cat)),
+              e("td",{className:"tr",style:{fontSize:12,color:"#94A3B8"}},inv.date.substring(5)),
+              e("td",{className:"tr",style:{fontSize:12,color:"#94A3B8"}},inv.dueDate.substring(5)),
+              e("td",{className:"tr",style:{fontSize:12}},fmt(inv.total)),
+              e("td",{className:"tr",style:{fontSize:13,fontWeight:700,color:"#F87171"}},fmt(inv.due))
+            )
+          }),
+          filtered.length>0?e("tr",{style:{background:"rgba(30,41,59,0.6)"}},
+            e("td",null,""),
+            e("td",{style:{fontWeight:700,color:"#94A3B8"}},"TOTAL ("+filtered.length+" invoices)"),
+            e("td",null,""),e("td",null,""),e("td",null,""),e("td",null,""),
+            e("td",{className:"tr",style:{fontWeight:700,color:"#FBBF24"}},fmt(filtered.reduce(function(s,inv){return s+inv.total},0))),
+            e("td",{className:"tr",style:{fontWeight:700,color:"#F87171"}},fmt(totalDue))
+          ):null
+        )
+      )
+    )
+  );
+}
+
+// ========== TAB 2: PAYABLE MANAGEMENT ==========
+function PayableTab(){
+  var payRate=PAY_TOTAL_INV>0?(PAY_TOTAL_PAID/PAY_TOTAL_INV*100).toFixed(1):"0.0";
+  return e("div",null,
+    // KPI cards
+    e("div",{className:"grid g4",style:{marginBottom:16}},
+      e("div",{className:"card",style:{textAlign:"center"}},
+        e("div",{className:"ct"},"TOTAL INVOICED"),
+        e("div",{className:"cv amber",style:{fontSize:28}},fmt(PAY_TOTAL_INV)),
+        e("div",{className:"cs"},PAY_INVOICES+" invoices in 2026")
+      ),
+      e("div",{className:"card",style:{textAlign:"center"}},
+        e("div",{className:"ct"},"TOTAL PAID"),
+        e("div",{className:"cv green",style:{fontSize:28}},fmt(PAY_TOTAL_PAID)),
+        e("div",{className:"cs"},payRate+"% payment rate")
+      ),
+      e("div",{className:"card",style:{textAlign:"center"}},
+        e("div",{className:"ct"},"OUTSTANDING PAYABLE"),
+        e("div",{className:"cv red",style:{fontSize:28}},fmt(PAY_TOTAL_OUT)),
+        e("div",{className:"cs"},(100-payRate).toFixed(1)+"% unpaid")
+      ),
+      e("div",{className:"card",style:{textAlign:"center"}},
+        e("div",{className:"ct"},"OVERDUE (PAST DUE DATE)"),
+        e("div",{className:"cv",style:{fontSize:28,color:"#475569"}},"N/A"),
+        e("div",{className:"cs",style:{color:"#FBBF24"}},"No due date in source data")
+      )
+    ),
+    // Monthly Invoiced vs Paid chart
+    e("div",{className:"st",style:{marginBottom:12}},"Monthly Invoiced vs Paid",e("span",{className:"badge b-blue",style:{marginLeft:8}},"2026")),
+    e(PayableChart,null),
+    // Monthly detail table
+    e("div",{className:"st",style:{marginTop:16,marginBottom:12}},"Monthly Payable Detail",e("span",{className:"badge b-amber",style:{marginLeft:8}},"By Invoice Month")),
+    e(PayableMonthlyTable,null),
+    // Cumulative Payable
+    e("div",{className:"st",style:{marginTop:16,marginBottom:12}},"Accumulated Payable",e("span",{className:"badge b-red",style:{marginLeft:8}},"Cumulative")),
+    e(PayableCumChart,null),
+    e(PayableCumTable,null),
+    // Category breakdown
+    e("div",{className:"st",style:{marginTop:16,marginBottom:12}},"Payable by Category",e("span",{className:"badge b-blue",style:{marginLeft:8}},"2026 YTD")),
+    e(PayableCatTable,null),
+    // Unpaid Invoice List
+    e("div",{className:"st",style:{marginTop:16,marginBottom:12}},"Unpaid Invoices",e("span",{className:"badge b-red",style:{marginLeft:8}},PAY_UNPAID.length+" items")),
+    e(UnpaidListSection,null),
+    // Source
+    e("div",{className:"note",style:{marginTop:16}},
+      "Source: Xero AP Account Transactions \u2014 2026 invoices only ("+PAY_INVOICES+" invoices, 'new raw data' tab). Methodology: Reference-based matching (GROUP BY Col D). Excl LT_DEBT & Investigate. Due date data not available in source \u2014 overdue columns reserved for future update."
+    )
+  );
+}
+
+function PayableChart(){
+  var data=PAY_MONTHLY.map(function(m){return{
+    name:m.label+(m.partial?"*":""),
+    Invoiced:m.invoiced,
+    Paid:m.paid
+  }});
+  return e("div",{className:"card",style:{padding:"20px 16px"}},
+    e(RC.ResponsiveContainer,{width:"100%",height:300},
+      e(RC.BarChart,{data:data,margin:{top:10,right:10,left:10,bottom:5}},
+        e(RC.CartesianGrid,{strokeDasharray:"3 3",stroke:"#1E293B"}),
+        e(RC.XAxis,{dataKey:"name",tick:{fill:"#94A3B8",fontSize:12},axisLine:{stroke:"#334155"}}),
+        e(RC.YAxis,{tick:{fill:"#94A3B8",fontSize:11},axisLine:{stroke:"#334155"},tickFormatter:function(v){return"$"+Math.round(v/1000)+"K"}}),
+        e(RC.Tooltip,{contentStyle:{background:"#1E293B",border:"1px solid #334155",borderRadius:8,fontSize:12},labelStyle:{color:"#F8FAFC"},formatter:function(v,n){return["$"+v.toLocaleString("en-AU"),n]}}),
+        e(RC.Legend,{wrapperStyle:{fontSize:12,color:"#94A3B8"}}),
+        e(RC.Bar,{dataKey:"Invoiced",fill:"#FBBF24",radius:[4,4,0,0],barSize:30}),
+        e(RC.Bar,{dataKey:"Paid",fill:"#34D399",radius:[4,4,0,0],barSize:30})
+      )
+    )
+  );
+}
+
+function PayableMonthlyTable(){
+  return e("div",{className:"card",style:{padding:0,overflow:"hidden"}},
+    e("table",null,
+      e("thead",null,e("tr",null,
+        e("th",null,"Month"),
+        e("th",{className:"tr"},"Invoiced"),
+        e("th",{className:"tr"},"Paid"),
+        e("th",{className:"tr"},"Unpaid"),
+        e("th",{className:"tr"},"Due Date Overdue"),
+        e("th",{className:"tr"},"Payment Rate")
+      )),
+      e("tbody",null,
+        PAY_MONTHLY.map(function(m,i){
+          return e("tr",{key:i},
+            e("td",null,m.label,m.partial?e("span",{style:{fontSize:10,color:"#64748B",marginLeft:4}},"partial"):""),
+            e("td",{className:"tr",style:{color:"#FBBF24",fontWeight:600}},fmt(m.invoiced)),
+            e("td",{className:"tr",style:{color:"#34D399",fontWeight:600}},fmt(m.paid)),
+            e("td",{className:"tr",style:{color:"#F87171",fontWeight:600}},fmt(m.unpaid)),
+            e("td",{className:"tr",style:{color:"#475569",fontStyle:"italic"}},m.dueOverdue),
+            e("td",{className:"tr"},
+              e("div",{style:{display:"flex",alignItems:"center",justifyContent:"flex-end",gap:8}},
+                e("div",{className:"pbar",style:{width:60}},e("div",{className:"pfill",style:{width:m.rate+"%",background:m.rate>=80?"#34D399":m.rate>=50?"#FBBF24":"#F87171"}})),
+                e("span",{style:{fontSize:12,color:"#60A5FA",fontWeight:600}},m.rate+"%")
+              )
+            )
+          )
+        }),
+        e("tr",{style:{background:"rgba(30,41,59,0.6)"}},
+          e("td",{style:{fontWeight:700,color:"#94A3B8"}},"TOTAL"),
+          e("td",{className:"tr",style:{fontWeight:700,color:"#FBBF24"}},fmt(PAY_TOTAL_INV)),
+          e("td",{className:"tr",style:{fontWeight:700,color:"#34D399"}},fmt(PAY_TOTAL_PAID)),
+          e("td",{className:"tr",style:{fontWeight:700,color:"#F87171"}},fmt(PAY_TOTAL_OUT)),
+          e("td",{className:"tr",style:{color:"#475569",fontStyle:"italic"}},"N/A"),
+          e("td",{className:"tr",style:{fontWeight:700,color:"#60A5FA"}},(PAY_TOTAL_PAID/PAY_TOTAL_INV*100).toFixed(1)+"%")
+        )
+      )
+    )
+  );
+}
+
+function PayableCumChart(){
+  var data=PAY_MONTHLY.map(function(m){return{
+    name:m.label+(m.partial?"*":""),
+    "Cum. Invoiced":m.cumInv,
+    "Cum. Paid":m.cumPaid,
+    "Cum. Outstanding":m.cumOut
+  }});
+  return e("div",{className:"card",style:{padding:"20px 16px"}},
+    e(RC.ResponsiveContainer,{width:"100%",height:280},
+      e(RC.ComposedChart,{data:data,margin:{top:10,right:10,left:10,bottom:5}},
+        e(RC.CartesianGrid,{strokeDasharray:"3 3",stroke:"#1E293B"}),
+        e(RC.XAxis,{dataKey:"name",tick:{fill:"#94A3B8",fontSize:12},axisLine:{stroke:"#334155"}}),
+        e(RC.YAxis,{tick:{fill:"#94A3B8",fontSize:11},axisLine:{stroke:"#334155"},tickFormatter:function(v){return"$"+Math.round(v/1000)+"K"}}),
+        e(RC.Tooltip,{contentStyle:{background:"#1E293B",border:"1px solid #334155",borderRadius:8,fontSize:12},labelStyle:{color:"#F8FAFC"},formatter:function(v,n){return["$"+v.toLocaleString("en-AU"),n]}}),
+        e(RC.Legend,{wrapperStyle:{fontSize:12,color:"#94A3B8"}}),
+        e(RC.Line,{type:"monotone",dataKey:"Cum. Invoiced",stroke:"#FBBF24",strokeWidth:3,dot:{fill:"#FBBF24",r:5}}),
+        e(RC.Line,{type:"monotone",dataKey:"Cum. Paid",stroke:"#34D399",strokeWidth:3,dot:{fill:"#34D399",r:5}}),
+        e(RC.Bar,{dataKey:"Cum. Outstanding",fill:"#F87171",radius:[4,4,0,0],barSize:35,fillOpacity:0.7})
+      )
+    )
+  );
+}
+
+function PayableCumTable(){
+  return e("div",{className:"card",style:{padding:0,marginTop:8,overflow:"hidden"}},
+    e("table",null,
+      e("thead",null,e("tr",null,
+        e("th",null,"Month"),
+        e("th",{className:"tr"},"Cum. Invoiced"),
+        e("th",{className:"tr"},"Cum. Paid"),
+        e("th",{className:"tr"},"Cum. Outstanding"),
+        e("th",{className:"tr"},"Cum. Rate")
+      )),
+      e("tbody",null,
+        PAY_MONTHLY.map(function(m,i){
+          var cumRate=(m.cumPaid/m.cumInv*100).toFixed(1);
+          return e("tr",{key:i},
+            e("td",null,m.label,m.partial?e("span",{style:{fontSize:10,color:"#64748B",marginLeft:4}},"partial"):""),
+            e("td",{className:"tr",style:{color:"#FBBF24"}},fmt(m.cumInv)),
+            e("td",{className:"tr",style:{color:"#34D399"}},fmt(m.cumPaid)),
+            e("td",{className:"tr",style:{color:"#F87171",fontWeight:700}},fmt(m.cumOut)),
+            e("td",{className:"tr",style:{color:"#60A5FA",fontWeight:600}},cumRate+"%")
+          )
+        })
+      )
+    )
+  );
+}
+
+function PayableCatTable(){
+  return e("div",{className:"card",style:{padding:0,overflow:"hidden"}},
+    e("table",null,
+      e("thead",null,e("tr",null,
+        e("th",null,"Category"),
+        e("th",{className:"tr"},"Invoiced"),
+        e("th",{className:"tr"},"Paid"),
+        e("th",{className:"tr"},"Outstanding"),
+        e("th",{className:"tr"},"Jan Inv/Paid"),
+        e("th",{className:"tr"},"Feb Inv/Paid"),
+        e("th",{className:"tr"},"Mar Inv/Paid"),
+        e("th",{className:"tr"},"Rate")
+      )),
+      e("tbody",null,
+        PAY_CAT.map(function(c,i){
+          var rate=c.inv>0?(c.paid/c.inv*100).toFixed(1):"0.0";
+          return e("tr",{key:i},
+            e("td",null,e("span",{style:{display:"inline-block",width:8,height:8,borderRadius:2,background:c.color,marginRight:8}}),c.name),
+            e("td",{className:"tr",style:{color:"#FBBF24"}},fmtK(c.inv)),
+            e("td",{className:"tr",style:{color:"#34D399"}},fmtK(c.paid)),
+            e("td",{className:"tr",style:{color:"#F87171",fontWeight:600}},fmtK(c.out)),
+            e("td",{className:"tr",style:{fontSize:11,color:"#94A3B8"}},fmtK(c.janInv)+"/"+fmtK(c.janPaid)),
+            e("td",{className:"tr",style:{fontSize:11,color:"#94A3B8"}},fmtK(c.febInv)+"/"+fmtK(c.febPaid)),
+            e("td",{className:"tr",style:{fontSize:11,color:"#94A3B8"}},fmtK(c.marInv)+"/"+fmtK(c.marPaid)),
+            e("td",{className:"tr"},
+              e("div",{style:{display:"flex",alignItems:"center",justifyContent:"flex-end",gap:8}},
+                e("div",{className:"pbar",style:{width:50}},e("div",{className:"pfill",style:{width:rate+"%",background:c.color}})),
+                e("span",{style:{fontSize:12,color:"#60A5FA",fontWeight:500}},rate+"%")
+              )
+            )
+          )
+        }),
+        e("tr",{style:{background:"rgba(30,41,59,0.6)"}},
+          e("td",{style:{fontWeight:700,color:"#94A3B8"}},"TOTAL"),
+          e("td",{className:"tr",style:{fontWeight:700,color:"#FBBF24"}},fmtK(PAY_TOTAL_INV)),
+          e("td",{className:"tr",style:{fontWeight:700,color:"#34D399"}},fmtK(PAY_TOTAL_PAID)),
+          e("td",{className:"tr",style:{fontWeight:700,color:"#F87171"}},fmtK(PAY_TOTAL_OUT)),
+          e("td",{className:"tr",style:{fontWeight:700,color:"#94A3B8"}},fmtK(PAY_MONTHLY[0].invoiced)+"/"+fmtK(PAY_MONTHLY[0].paid)),
+          e("td",{className:"tr",style:{fontWeight:700,color:"#94A3B8"}},fmtK(PAY_MONTHLY[1].invoiced)+"/"+fmtK(PAY_MONTHLY[1].paid)),
+          e("td",{className:"tr",style:{fontWeight:700,color:"#94A3B8"}},fmtK(PAY_MONTHLY[2].invoiced)+"/"+fmtK(PAY_MONTHLY[2].paid)),
+          e("td",{className:"tr",style:{fontWeight:700,color:"#60A5FA"}},(PAY_TOTAL_PAID/PAY_TOTAL_INV*100).toFixed(1)+"%")
+        )
+      )
+    )
+  );
+}
+
+// ========== APP WITH TAB SWITCHING ==========
+function App(){
+  var tabState=useState("debt");
+  var tab=tabState[0];
+  var setTab=tabState[1];
+  return e("div",{className:"app"},
+    e("div",{className:"header"},
+      e("h1",null,"Shafston Debt Management"),
+      e("div",{className:"sub"},"Shafston International Pty Ltd | AP Account | Reference-Matched Analysis | Mar 2026")
+    ),
+    e("div",{className:"tabs"},
+      e("div",{className:"tab"+(tab==="debt"?" active":""),onClick:function(){setTab("debt")}},"Debt Management"),
+      e("div",{className:"tab"+(tab==="payable"?" active":""),onClick:function(){setTab("payable")}},"Payable Management")
+    ),
+    tab==="debt"?e(DebtTab,null):e(PayableTab,null)
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(e(App,null));
 </script>
 </body>
 </html>
