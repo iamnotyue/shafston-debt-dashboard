@@ -53,12 +53,12 @@ var useState=React.useState;
 
 // === DATA START ===
 // ========== TAB 1: DEBT MANAGEMENT DATA ==========
-var TRADE_PAYABLE=532375;
-var TRADE_INVOICES=468;
+var TRADE_PAYABLE=534196;
+var TRADE_INVOICES=471;
 var LT_DEBT=1599154;
 var INVESTIGATE=47080;
 var CATS=[
-  {name:"Commission",outstanding:353804,invoices:403,color:"#8B5CF6"},
+  {name:"Commission",outstanding:355625,invoices:406,color:"#8B5CF6"},
   {name:"Refund",outstanding:73558,invoices:18,color:"#F87171"},
   {name:"Rent & Outgoing",outstanding:69147,invoices:7,color:"#F59E0B"},
   {name:"OPEX",outstanding:35866,invoices:40,color:"#3B82F6"},
@@ -68,20 +68,20 @@ var EXTRA_DEBT=[
   {name:"ATO",outstanding:724508,color:"#F97316",source:"Xero BS CA02"},
   {name:"Payroll Tax",outstanding:75266,color:"#14B8A6",source:"QRO (manual)"}
 ];
-var TOTAL_DEBT=1362652;
-var maxCat=353804;
-var CLEAR_START=617806;
+var TOTAL_DEBT=1364473;
+var maxCat=355625;
+var CLEAR_START=619627;
 var CLEAR_TOTAL=85431;
 var CLEARANCE=[
-  {label:"Jan",cleared:37338,cumCleared:37338,remaining:580468,partial:false},
-  {label:"Feb",cleared:45475,cumCleared:82813,remaining:534993,partial:false},
-  {label:"Mar",cleared:2617,cumCleared:85430,remaining:532376,partial:true},
+  {label:"Jan 26",cleared:37338,cumCleared:37338,remaining:582289,partial:false},
+  {label:"Feb 26",cleared:45475,cumCleared:82813,remaining:536814,partial:false},
+  {label:"Mar 26",cleared:2617,cumCleared:85430,remaining:534197,partial:true},
 ];
 var CAT_CLEARANCE=[
   {name:"Rent & Outgoing",color:"#F59E0B",jan:11569,feb:18202,mar:0,total:29771,start:98918,remaining:69147},
   {name:"OPEX",color:"#3B82F6",jan:10923,feb:9631,mar:0,total:20554,start:56420,remaining:35866},
   {name:"Study Tour",color:"#06B6D4",jan:5794,feb:8060,mar:2144,total:15998,start:15998,remaining:0},
-  {name:"Commission",color:"#8B5CF6",jan:1985,feb:7795,mar:473,total:10253,start:364057,remaining:353804},
+  {name:"Commission",color:"#8B5CF6",jan:1985,feb:7795,mar:473,total:10253,start:365878,remaining:355625},
   {name:"Refund",color:"#F87171",jan:7067,feb:1788,mar:0,total:8855,start:82413,remaining:73558},
 ];
 var STAT_CLEAR_START=906178;
@@ -91,35 +91,29 @@ var STAT_CLEARANCE=[
   {name:"Super",color:"#EC4899",start:79878,jan:1087,feb:48288,mar:0,total:49375,remaining:30503},
   {name:"Payroll Tax",color:"#14B8A6",start:95792,jan:6842,feb:6842,mar:6842,total:20526,remaining:75266},
 ];
-// ========== TAB 2: PAYABLE MANAGEMENT DATA (2026, DueDate<=today, excl HR accts/LT_DEBT/INVESTIGATE, inc statutory) ==========
-var PAY_TOTAL_INV=630419;
-var PAY_TOTAL_PAID=473407;
-var PAY_TOTAL_OUT=84361;
-var PAY_INVOICES=426;
+// ========== TAB 2: PAYABLE MANAGEMENT DATA (2026 only) ==========
+var PAY_TOTAL_INV=577819;
+var PAY_TOTAL_PAID=474731;
+var PAY_TOTAL_OUT=84494;
+var PAY_INVOICES=430;
 var PAY_MONTHLY=[
-  {label:"Jan",invoiced:267709,paid:169650,unpaid:46846,rate:63.4,cumInv:267709,cumPaid:169650,cumOut:46846,dueOverdue:"N/A",partial:false},
-  {label:"Feb",invoiced:278019,paid:249736,unpaid:11603,rate:89.8,cumInv:545728,cumPaid:419386,cumOut:58449,dueOverdue:"N/A",partial:false},
-  {label:"Mar",invoiced:83665,paid:52995,unpaid:25912,rate:63.3,cumInv:629393,cumPaid:472381,cumOut:84361,dueOverdue:"N/A",partial:true},
-  {label:"Apr",invoiced:750,paid:750,unpaid:0,rate:100,cumInv:630143,cumPaid:473131,cumOut:84361,dueOverdue:"N/A",partial:false},
-  {label:"Jul",invoiced:276,paid:276,unpaid:0,rate:100,cumInv:630419,cumPaid:473407,cumOut:84361,dueOverdue:"N/A",partial:false},
+  {label:"Jan 26",invoiced:231951,paid:169650,unpaid:0,rate:73.1,cumInv:231951,cumPaid:169650,cumOut:0,dueOverdue:"N/A",partial:false},
+  {label:"Feb 26",invoiced:265895,paid:249736,unpaid:0,rate:93.9,cumInv:497846,cumPaid:419386,cumOut:0,dueOverdue:"N/A",partial:false},
+  {label:"Mar 26",invoiced:78947,paid:54319,unpaid:0,rate:68.8,cumInv:576793,cumPaid:473705,cumOut:0,dueOverdue:"N/A",partial:true},
+  {label:"Apr 26",invoiced:750,paid:750,unpaid:0,rate:100,cumInv:577543,cumPaid:474455,cumOut:0,dueOverdue:"N/A",partial:false},
+  {label:"Jul 26",invoiced:276,paid:276,unpaid:0,rate:100,cumInv:577819,cumPaid:474731,cumOut:0,dueOverdue:"N/A",partial:false},
 ];
 var PAY_CAT=[
-  {name:"OPEX",color:"#3B82F6",inv:283631,paid:241863,out:7198,cnt:296,
-   janInv:152269,janPaid:120963,febInv:106929,febPaid:101339,marInv:24433,marPaid:19561,aprInv:0,aprPaid:0,julInv:0,julPaid:0},
-  {name:"Study Tour",color:"#06B6D4",inv:218059,paid:202621,out:15559,cnt:55,
-   janInv:25549,janPaid:25549,febInv:143639,febPaid:143639,marInv:48871,marPaid:33433,aprInv:0,aprPaid:0,julInv:0,julPaid:0},
+  {name:"OPEX",color:"#3B82F6",inv:254926,paid:243188,out:7388,cnt:297,
+   janInv:122195,janPaid:120963,febInv:106929,febPaid:101339,marInv:25802,marPaid:20886,aprInv:0,aprPaid:0,julInv:0,julPaid:0},
+  {name:"Study Tour",color:"#06B6D4",inv:218121,paid:202621,out:15502,cnt:56,
+   janInv:25549,janPaid:25549,febInv:143639,febPaid:143639,marInv:48934,marPaid:33433,aprInv:0,aprPaid:0,julInv:0,julPaid:0},
   {name:"Rent & Outgoing",color:"#F59E0B",inv:50589,paid:17414,out:18925,cnt:20,
    janInv:36608,janPaid:13106,febInv:9769,febPaid:4308,marInv:4211,marPaid:0,aprInv:0,aprPaid:0,julInv:0,julPaid:0},
   {name:"Refund",color:"#F87171",inv:29872,paid:5806,out:24068,cnt:18,
    janInv:27432,janPaid:5356,febInv:2440,febPaid:450,marInv:0,marPaid:0,aprInv:0,aprPaid:0,julInv:0,julPaid:0},
-  {name:"Commission",color:"#8B5CF6",inv:23551,paid:5702,out:18611,cnt:37,
-   janInv:20166,janPaid:4676,febInv:2359,febPaid:0,marInv:0,marPaid:0,aprInv:750,aprPaid:750,julInv:276,julPaid:276},
-  {name:"Superannuation",color:"#A78BFA",inv:31716,paid:0,out:0,cnt:0,
-   janInv:12684,janPaid:0,febInv:12883,febPaid:0,marInv:6149,marPaid:0,aprInv:0,aprPaid:0,julInv:0,julPaid:0},
-  {name:"ATO (BAS)",color:"#F97316",inv:-7000,paid:0,out:0,cnt:0,
-   janInv:-7000,janPaid:0,febInv:0,febPaid:0,marInv:0,marPaid:0,aprInv:0,aprPaid:0,julInv:0,julPaid:0},
-  {name:"Payroll Tax",color:"#14B8A6",inv:0,paid:0,out:0,cnt:0,
-   janInv:0,janPaid:0,febInv:0,febPaid:0,marInv:0,marPaid:0,aprInv:0,aprPaid:0,julInv:0,julPaid:0},
+  {name:"Commission",color:"#8B5CF6",inv:24310,paid:5702,out:18611,cnt:39,
+   janInv:20166,janPaid:4676,febInv:3118,febPaid:0,marInv:0,marPaid:0,aprInv:750,aprPaid:750,julInv:276,julPaid:276},
 ];
 var PAY_UNPAID=[
   {contact:"BRISBANE CITY COUNCIL",invNum:"BCC Rate - 101/188 SHAFSTON AVE -Q1 2026",ref:"BCC Rate - 101/188 SHAFST",date:"2026-01-01",dueDate:"2026-01-01",total:9253,paid:0,due:9253,cat:"Rent & Outgoing",mo:"Jan"},
@@ -131,7 +125,7 @@ var PAY_UNPAID=[
   {contact:"Masato SHINDO",invNum:"Refund-Masato SHINDO",ref:"Refund-Masato SHINDO",date:"2026-01-20",dueDate:"2026-02-17",total:3010,paid:0,due:3010,cat:"Refund",mo:"Jan"},
   {contact:"UniLodge @ Shafston",invNum:"SERV-INV-05032026-602-Unit 602",ref:"SERV-INV-05032026-602-Uni",date:"2026-03-05",dueDate:"2026-03-05",total:2431,paid:0,due:2431,cat:"Rent & Outgoing",mo:"Mar"},
   {contact:"Yixi XIONG",invNum:"Refund-Yixi XIONG",ref:"Refund-Yixi XIONG",date:"2026-01-21",dueDate:"2026-02-18",total:2371,paid:0,due:2371,cat:"Refund",mo:"Jan"},
-  {contact:"St Paul's School",invNum:"ST-INV-  Tour 26-18-Oizumi High School-Deposit",ref:"ST-INV-  Tour 26-18-Oizum",date:"2026-03-05",dueDate:"2026-03-05",total:2200,paid:0,due:2200,cat:"Study Tour",mo:"Mar"},
+  {contact:"St Paul’s School",invNum:"ST-INV-  Tour 26-18-Oizumi High School-Deposit",ref:"ST-INV-  Tour 26-18-Oizum",date:"2026-03-05",dueDate:"2026-03-05",total:2200,paid:0,due:2200,cat:"Study Tour",mo:"Mar"},
   {contact:"Jinghan XIONG",invNum:"Refund-Jinghan XIONG",ref:"Refund-Jinghan XIONG",date:"2026-01-21",dueDate:"2026-02-18",total:2096,paid:0,due:2096,cat:"Refund",mo:"Jan"},
   {contact:"Bestone Print",invNum:"ST-print-INV00010",ref:"ST-print-INV00010",date:"2026-03-05",dueDate:"2026-03-05",total:1894,paid:0,due:1894,cat:"Study Tour",mo:"Mar"},
   {contact:"AG-YouTOOProject",invNum:"INTCOMM-INV-56124-Ana Maria ROBELLAT PEREZ-GE INST 2",ref:"INTCOMM-INV-56124-Ana Mar",date:"2026-01-12",dueDate:"2026-02-12",total:1827,paid:0,due:1827,cat:"Commission",mo:"Jan"},
@@ -139,13 +133,13 @@ var PAY_UNPAID=[
   {contact:"UniLodge @ Shafston",invNum:"SERV-INV-05032026-713-Unit 713",ref:"SERV-INV-05032026-713-Uni",date:"2026-03-05",dueDate:"2026-03-05",total:1780,paid:0,due:1780,cat:"Rent & Outgoing",mo:"Mar"},
   {contact:"AG-Deway Education (ACEC)",invNum:"INTCOMM-INV-SF19012026-Yuyao ZHANG-HSP INST 1",ref:"INTCOMM-INV-SF19012026-Yu",date:"2026-01-19",dueDate:"2026-02-19",total:1616,paid:0,due:1616,cat:"Commission",mo:"Jan"},
   {contact:"AG-Deway Education (ACEC)",invNum:"INTCOMM-INV-SF19012026-Yuyao ZHANG-HSP INST 2",ref:"INTCOMM-INV-SF19012026-Yu",date:"2026-01-19",dueDate:"2026-02-19",total:1616,paid:0,due:1616,cat:"Commission",mo:"Jan"},
+  {contact:"AGL-Shafston House",invNum:"OP-9-19 Castlebar Street-Electricity-Jan 2026",ref:"OP-9-19 Castlebar Street-",date:"2026-02-20",dueDate:"2026-02-20",total:1547,paid:0,due:1547,cat:"OPEX",mo:"Feb"},
   {contact:"Suwa LOTTA",invNum:"Refund-Suwa LOTTA-SAOS Bond",ref:"Refund-Suwa LOTTA-SAOS Bo",date:"2026-02-06",dueDate:"2026-03-06",total:1540,paid:0,due:1540,cat:"Refund",mo:"Feb"},
   {contact:"AG-Ausity Consulting",invNum:"INTCOMM-INV-0202260311-Yihan YIN-HSP FULL",ref:"INTCOMM-INV-0202260311-Yi",date:"2026-01-26",dueDate:"2026-02-26",total:1430,paid:0,due:1430,cat:"Commission",mo:"Jan"},
   {contact:"TURRBAL DIPPIL PTY LTD",invNum:"ST-INV-TD3495-Okayama Daianji",ref:"ST-INV-TD3495-Okayama Dai",date:"2026-03-04",dueDate:"2026-03-04",total:1315,paid:0,due:1315,cat:"Study Tour",mo:"Mar"},
   {contact:"TURRBAL DIPPIL PTY LTD",invNum:"ST-INV-TD3493-Okayama Daianji",ref:"ST-INV-TD3493-Okayama Dai",date:"2026-03-04",dueDate:"2026-03-04",total:1315,paid:0,due:1315,cat:"Study Tour",mo:"Mar"},
   {contact:"TURRBAL DIPPIL PTY LTD",invNum:"ST-INV-TD3492-Okayama Daianji",ref:"ST-INV-TD3492-Okayama Dai",date:"2026-03-04",dueDate:"2026-03-04",total:1315,paid:0,due:1315,cat:"Study Tour",mo:"Mar"},
   {contact:"AG-Deway Education (ACEC)",invNum:"INTCOMM-SF19012026-Yuyao ZHANG-HSP 10-weeks FULL",ref:"INTCOMM-SF19012026-Yuyao ",date:"2026-01-19",dueDate:"2026-02-19",total:1293,paid:0,due:1293,cat:"Commission",mo:"Jan"},
-  {contact:"Clearmatch Originate Pty Limited",invNum:"Public liability-$1,269.51",ref:"Public liability-$1,269.5",date:"2026-03-09",dueDate:"2026-03-10",total:1270,paid:0,due:1270,cat:"OPEX",mo:"Mar"},
   {contact:"I Made Tapayasa PUTRA NADI",invNum:"Refund-I Made Tapayasa Putra Nadi",ref:"Refund-I Made Tapayasa Pu",date:"2026-01-07",dueDate:"2026-02-04",total:1225,paid:0,due:1225,cat:"Refund",mo:"Jan"},
   {contact:"Geckoes Wildlife Pty Ltd",invNum:"ST-INV- 00007391-Okayama Daianji",ref:"ST-INV- 00007391-Okayama ",date:"2026-03-09",dueDate:"2026-03-09",total:1210,paid:0,due:1210,cat:"Study Tour",mo:"Mar"},
   {contact:"Aust Peng International Pty Ltd",invNum:"ST -INV 2026022302-GRP CHIM -70%deposit",ref:"ST -INV 2026022302-GRP CH",date:"2026-03-06",dueDate:"2026-03-06",total:1120,paid:0,due:1120,cat:"Study Tour",mo:"Mar"},
@@ -156,7 +150,7 @@ var PAY_UNPAID=[
   {contact:"Aust Peng International Pty Ltd",invNum:"ST - INV202602123-Okayama Daianji-final payment",ref:"ST - INV202602123-Okayama",date:"2026-03-05",dueDate:"2026-03-05",total:810,paid:0,due:810,cat:"Study Tour",mo:"Mar"},
   {contact:"AG-Dylan Realty Pty Ltd",invNum:"INTCOMM-INV-202526013-Yihan XU-YLC FULL",ref:"INTCOMM-INV-202526013-Yih",date:"2026-02-02",dueDate:"2026-03-02",total:743,paid:0,due:743,cat:"Commission",mo:"Feb"},
   {contact:"Ana Luz ECHEVERRIA CRUZ",invNum:"Refund-Ana Luz ECHEVERRIA CRUZ",ref:"Refund-Ana Luz ECHEVERRIA",date:"2026-01-30",dueDate:"2026-02-27",total:570,paid:0,due:570,cat:"Refund",mo:"Jan"},
-  {contact:"AG-360 Life Experience",invNum:"INTCOMM-INV-564-Grace Isabella TORRES ORTIZ-HSP INST 2&3 Balance",ref:"INTCOMM-INV-564-Grace Isa",date:"2026-01-14",dueDate:"2026-01-14",total:540,paid:0,due:540,cat:"Commission",mo:"Jan"},
+  {contact:"AG-360 Life Experience",invNum:"INTCOMM-INV-564-Grace Isabella TORRES ORTIZ-HSP INST 2&3 Bal",ref:"INTCOMM-INV-564-Grace Isa",date:"2026-01-14",dueDate:"2026-01-14",total:540,paid:0,due:540,cat:"Commission",mo:"Jan"},
   {contact:"AG-Fernandes Migration",invNum:"INTCOMM-INV-13351-Karen DE SOUZA POTER-C3ECEC INST 1&2",ref:"INTCOMM-INV-13351-Karen D",date:"2026-01-22",dueDate:"2026-02-22",total:531,paid:0,due:531,cat:"Commission",mo:"Jan"},
   {contact:"AG-LAE Latino Australia Education",invNum:"INTCOMM-INV-95762-Anai Romina HERRERA PEREZ-C3ECEC INST 1&2",ref:"INTCOMM-INV-95762-Anai Ro",date:"2026-01-23",dueDate:"2026-02-23",total:531,paid:0,due:531,cat:"Commission",mo:"Jan"},
   {contact:"AG-WEST 1",invNum:"INTCOMM-INV-0691-Kauany Luisa DOS SANTOS VIEIRA-DIT INST 6",ref:"INTCOMM-INV-0691-Kauany L",date:"2026-01-22",dueDate:"2026-02-22",total:505,paid:0,due:505,cat:"Commission",mo:"Jan"},
@@ -164,7 +158,7 @@ var PAY_UNPAID=[
   {contact:"AG-Fernandes Migration",invNum:"INTCOMM-INV-13360-Thais ROMERO CAMPIAO-DECEC INST 6",ref:"INTCOMM-INV-13360-Thais R",date:"2026-01-13",dueDate:"2026-02-13",total:505,paid:0,due:505,cat:"Commission",mo:"Jan"},
   {contact:"AG-Migrate Services Links Pty Ltd",invNum:"INTCOMM-INV-10084-Rodna CHECO SANCHEZ-C3ECEC INST 5",ref:"INTCOMM-INV-10084-Rodna C",date:"2026-01-06",dueDate:"2026-02-06",total:505,paid:0,due:505,cat:"Commission",mo:"Jan"},
   {contact:"Hana NAKATSUJI",invNum:"Refund-Hana NAKATSUJI",ref:"Refund-Hana NAKATSUJI",date:"2026-01-15",dueDate:"2026-02-12",total:498,paid:0,due:498,cat:"Refund",mo:"Jan"},
-  {contact:"AG-SOL EDU Pty Ltd",invNum:"INTCOMM-INV-B052982-N3W0-Carolain Yojana RUBIANO SOLORZANO-DECEC INST 5",ref:"INTCOMM-INV-B052982-N3W0-",date:"2026-01-08",dueDate:"2026-02-08",total:458,paid:0,due:458,cat:"Commission",mo:"Jan"},
+  {contact:"AG-SOL EDU Pty Ltd",invNum:"INTCOMM-INV-B052982-N3W0-Carolain Yojana RUBIANO SOLORZANO-D",ref:"INTCOMM-INV-B052982-N3W0-",date:"2026-01-08",dueDate:"2026-02-08",total:458,paid:0,due:458,cat:"Commission",mo:"Jan"},
   {contact:"YOMIGO PTY Ltd",invNum:"ST - LG Group Lunch ",ref:"ST - LG Group Lunch ",date:"2026-02-25",dueDate:"2026-02-25",total:456,paid:0,due:456,cat:"OPEX",mo:"Feb"},
   {contact:"Langports",invNum:"Cambridge Refund-INV-0245",ref:"Cambridge Refund-INV-0245",date:"2026-02-13",dueDate:"2026-02-27",total:450,paid:0,due:450,cat:"Refund",mo:"Feb"},
   {contact:"AG-Fernandes Migration",invNum:"INTCOMM-INV-13354-Mayara FERREIRA DA SILVA-C3ECEC INST 5",ref:"INTCOMM-INV-13354-Mayara ",date:"2026-01-05",dueDate:"2026-02-05",total:449,paid:0,due:449,cat:"Commission",mo:"Jan"},
@@ -183,10 +177,9 @@ var PAY_UNPAID=[
   {contact:"AG-Hey Move Away",invNum:"INTCOMM-INV-B0337-13-Kaly RUBIO ANGELES-DIT INST 5",ref:"INTCOMM-INV-B0337-13-Kaly",date:"2026-01-27",dueDate:"2026-02-27",total:238,paid:0,due:238,cat:"Commission",mo:"Jan"},
   {contact:"AG-Helpmate Student Agency",invNum:"INTCOMM-INV-0050-Natalia Hernandez Bedoya-C3ECEC INST 7",ref:"INTCOMM-INV-0050-Natalia ",date:"2026-01-28",dueDate:"2026-02-28",total:210,paid:0,due:210,cat:"Commission",mo:"Jan"},
   {contact:"AG-Direction Australia",invNum:"INTCOMM-INV-26068-Luiggi Octavio CASTAGNETO ORE-DCS INST 1",ref:"INTCOMM-INV-26068-Luiggi ",date:"2026-01-19",dueDate:"2026-02-19",total:165,paid:0,due:165,cat:"Commission",mo:"Jan"},
-  {contact:"Miranda Su",invNum:"Reimbursement - Sydney Business Trips & Cambridge Feb 2026",ref:"Reimbursement - Sydney Bu",date:"2026-02-25",dueDate:"2026-02-25",total:131,paid:0,due:131,cat:"OPEX",mo:"Feb"},
-  {contact:"Study Tour Education Centre Australia",invNum:"Admin - Service Fee - Sophia trip reimbursement-Feb 2026 Hong Kong",ref:"Admin - Service Fee - Sop",date:"2026-03-02",dueDate:"2026-03-02",total:120,paid:0,due:120,cat:"Study Tour",mo:"Mar"},
+  {contact:"GRAVITYKIT",invNum:"OP-website form service",ref:"OP-website form service",date:"2026-03-06",dueDate:"2026-03-06",total:99,paid:0,due:99,cat:"OPEX",mo:"Mar"},
+  {contact:"Woolworths",invNum:"ST-Okayama Daianji-Cooking Class Materials ",ref:"ST-Okayama Daianji-Cookin",date:"2026-03-03",dueDate:"2026-03-03",total:63,paid:0,due:63,cat:"Study Tour",mo:"Mar"},
   {contact:"Amaysim",invNum:"Damon Telephones",ref:"Damon Telephones",date:"2026-03-02",dueDate:"2026-03-02",total:60,paid:0,due:60,cat:"OPEX",mo:"Mar"},
-  {contact:"AK Health Care",invNum:"BNE",ref:"BNE",date:"2026-03-03",dueDate:"2026-03-04",total:55,paid:0,due:55,cat:"OPEX",mo:"Mar"},
   {contact:"CHATGPT",invNum:"Direct Debit",ref:"Direct Debit",date:"2026-03-02",dueDate:"2026-03-05",total:32,paid:0,due:32,cat:"OPEX",mo:"Mar"},
   {contact:"Yidan Qin",invNum:"ST-Okayama Daianji-Welcome Coffee",ref:"ST-Okayama Daianji-Welcom",date:"2026-03-06",dueDate:"2026-03-06",total:30,paid:0,due:30,cat:"Study Tour",mo:"Mar"},
   {contact:"Lebara",invNum:"Direct Debit",ref:"Direct Debit",date:"2026-01-24",dueDate:"2026-01-25",total:22,paid:0,due:22,cat:"OPEX",mo:"Jan"},
