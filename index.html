@@ -92,27 +92,28 @@ var STAT_CLEARANCE=[
   {name:"Payroll Tax",color:"#14B8A6",start:95792,jan:6842,feb:6842,mar:6842,total:20526,remaining:75266},
 ];
 // ========== TAB 2: PAYABLE MANAGEMENT DATA (2026 only) ==========
-var PAY_TOTAL_INV=577819;
-var PAY_TOTAL_PAID=474731;
-var PAY_TOTAL_OUT=84494;
-var PAY_INVOICES=430;
+var PAY_TOTAL_INV=581673;
+var PAY_TOTAL_PAID=475698;
+var PAY_TOTAL_OUT=105975;
+var PAY_INVOICES=435;
+var PAY_PAST_DUE=87382;
 var PAY_MONTHLY=[
-  {label:"Jan 26",invoiced:231951,paid:169650,unpaid:0,rate:73.1,cumInv:231951,cumPaid:169650,cumOut:0,dueOverdue:"N/A",partial:false},
-  {label:"Feb 26",invoiced:265895,paid:249736,unpaid:0,rate:93.9,cumInv:497846,cumPaid:419386,cumOut:0,dueOverdue:"N/A",partial:false},
-  {label:"Mar 26",invoiced:78947,paid:54319,unpaid:0,rate:68.8,cumInv:576793,cumPaid:473705,cumOut:0,dueOverdue:"N/A",partial:true},
-  {label:"Apr 26",invoiced:750,paid:750,unpaid:0,rate:100,cumInv:577543,cumPaid:474455,cumOut:0,dueOverdue:"N/A",partial:false},
-  {label:"Jul 26",invoiced:276,paid:276,unpaid:0,rate:100,cumInv:577819,cumPaid:474731,cumOut:0,dueOverdue:"N/A",partial:false},
+  {label:"Jan 26",invoiced:231951,paid:169650,unpaid:62301,rate:73.1,cumInv:231951,cumPaid:169650,cumOut:62301,dueOverdue:"N/A",partial:false},
+  {label:"Feb 26",invoiced:265895,paid:249736,unpaid:16159,rate:93.9,cumInv:497846,cumPaid:419386,cumOut:78460,dueOverdue:"N/A",partial:false},
+  {label:"Mar 26",invoiced:82801,paid:55286,unpaid:27515,rate:66.8,cumInv:580647,cumPaid:474672,cumOut:105975,dueOverdue:"N/A",partial:true},
+  {label:"Apr 26",invoiced:750,paid:750,unpaid:0,rate:100,cumInv:581397,cumPaid:475422,cumOut:105975,dueOverdue:"N/A",partial:false},
+  {label:"Jul 26",invoiced:276,paid:276,unpaid:0,rate:100,cumInv:581673,cumPaid:475698,cumOut:105975,dueOverdue:"N/A",partial:false},
 ];
 var PAY_CAT=[
-  {name:"OPEX",color:"#3B82F6",inv:254926,paid:243188,out:7388,cnt:297,
+  {name:"OPEX",color:"#3B82F6",inv:254926,paid:243188,out:11738,cnt:297,
    janInv:122195,janPaid:120963,febInv:106929,febPaid:101339,marInv:25802,marPaid:20886,aprInv:0,aprPaid:0,julInv:0,julPaid:0},
-  {name:"Study Tour",color:"#06B6D4",inv:218121,paid:202621,out:15502,cnt:56,
-   janInv:25549,janPaid:25549,febInv:143639,febPaid:143639,marInv:48934,marPaid:33433,aprInv:0,aprPaid:0,julInv:0,julPaid:0},
-  {name:"Rent & Outgoing",color:"#F59E0B",inv:50589,paid:17414,out:18925,cnt:20,
+  {name:"Study Tour",color:"#06B6D4",inv:221976,paid:203588,out:18388,cnt:61,
+   janInv:25549,janPaid:25549,febInv:143639,febPaid:143639,marInv:52788,marPaid:34400,aprInv:0,aprPaid:0,julInv:0,julPaid:0},
+  {name:"Rent & Outgoing",color:"#F59E0B",inv:50589,paid:17414,out:33175,cnt:20,
    janInv:36608,janPaid:13106,febInv:9769,febPaid:4308,marInv:4211,marPaid:0,aprInv:0,aprPaid:0,julInv:0,julPaid:0},
-  {name:"Refund",color:"#F87171",inv:29872,paid:5806,out:24068,cnt:18,
+  {name:"Refund",color:"#F87171",inv:29872,paid:5806,out:24066,cnt:18,
    janInv:27432,janPaid:5356,febInv:2440,febPaid:450,marInv:0,marPaid:0,aprInv:0,aprPaid:0,julInv:0,julPaid:0},
-  {name:"Commission",color:"#8B5CF6",inv:24310,paid:5702,out:18611,cnt:39,
+  {name:"Commission",color:"#8B5CF6",inv:24310,paid:5702,out:18608,cnt:39,
    janInv:20166,janPaid:4676,febInv:3118,febPaid:0,marInv:0,marPaid:0,aprInv:750,aprPaid:750,julInv:276,julPaid:276},
 ];
 var PAY_UNPAID=[
@@ -123,6 +124,7 @@ var PAY_UNPAID=[
   {contact:"Yazmin ARISMENDI OCAMPO",invNum:"Refund-Yazmin ARISMENDI OCAMPO",ref:"Refund-Yazmin ARISMENDI O",date:"2026-01-28",dueDate:"2026-02-25",total:3831,paid:0,due:3831,cat:"Refund",mo:"Jan"},
   {contact:"BRISBANE CITY COUNCIL",invNum:"BCC Rate - 100/188 SHAFSTON AVE - 2026",ref:"BCC Rate - 100/188 SHAFST",date:"2026-02-06",dueDate:"2026-02-06",total:3660,paid:0,due:3660,cat:"Rent & Outgoing",mo:"Feb"},
   {contact:"Masato SHINDO",invNum:"Refund-Masato SHINDO",ref:"Refund-Masato SHINDO",date:"2026-01-20",dueDate:"2026-02-17",total:3010,paid:0,due:3010,cat:"Refund",mo:"Jan"},
+  {contact:"One N More Pty Ltd",invNum:"ST-Okayama Daianji -Arrival Lunch",ref:"ST-Okayama Daianji -Arriv",date:"2026-03-10",dueDate:"2026-03-10",total:2686,paid:0,due:2686,cat:"Study Tour",mo:"Mar"},
   {contact:"UniLodge @ Shafston",invNum:"SERV-INV-05032026-602-Unit 602",ref:"SERV-INV-05032026-602-Uni",date:"2026-03-05",dueDate:"2026-03-05",total:2431,paid:0,due:2431,cat:"Rent & Outgoing",mo:"Mar"},
   {contact:"Yixi XIONG",invNum:"Refund-Yixi XIONG",ref:"Refund-Yixi XIONG",date:"2026-01-21",dueDate:"2026-02-18",total:2371,paid:0,due:2371,cat:"Refund",mo:"Jan"},
   {contact:"St Paul’s School",invNum:"ST-INV-  Tour 26-18-Oizumi High School-Deposit",ref:"ST-INV-  Tour 26-18-Oizum",date:"2026-03-05",dueDate:"2026-03-05",total:2200,paid:0,due:2200,cat:"Study Tour",mo:"Mar"},
@@ -176,12 +178,14 @@ var PAY_UNPAID=[
   {contact:"AG-Dingoos Australia",invNum:"INTCOMM-INV-40740-Maria Fernanda YEPEZ TUFINO-C3IS INST 3",ref:"INTCOMM-INV-40740-Maria F",date:"2026-02-04",dueDate:"2026-03-04",total:275,paid:0,due:275,cat:"Commission",mo:"Feb"},
   {contact:"AG-Hey Move Away",invNum:"INTCOMM-INV-B0337-13-Kaly RUBIO ANGELES-DIT INST 5",ref:"INTCOMM-INV-B0337-13-Kaly",date:"2026-01-27",dueDate:"2026-02-27",total:238,paid:0,due:238,cat:"Commission",mo:"Jan"},
   {contact:"AG-Helpmate Student Agency",invNum:"INTCOMM-INV-0050-Natalia Hernandez Bedoya-C3ECEC INST 7",ref:"INTCOMM-INV-0050-Natalia ",date:"2026-01-28",dueDate:"2026-02-28",total:210,paid:0,due:210,cat:"Commission",mo:"Jan"},
+  {contact:"Captain Cook Cruise",invNum:"ST-Wu Si Chong Group ",ref:"ST-Wu Si Chong Group ",date:"2026-03-10",dueDate:"2026-03-10",total:189,paid:0,due:189,cat:"Study Tour",mo:"Mar"},
   {contact:"AG-Direction Australia",invNum:"INTCOMM-INV-26068-Luiggi Octavio CASTAGNETO ORE-DCS INST 1",ref:"INTCOMM-INV-26068-Luiggi ",date:"2026-01-19",dueDate:"2026-02-19",total:165,paid:0,due:165,cat:"Commission",mo:"Jan"},
   {contact:"GRAVITYKIT",invNum:"OP-website form service",ref:"OP-website form service",date:"2026-03-06",dueDate:"2026-03-06",total:99,paid:0,due:99,cat:"OPEX",mo:"Mar"},
-  {contact:"Woolworths",invNum:"ST-Okayama Daianji-Cooking Class Materials ",ref:"ST-Okayama Daianji-Cookin",date:"2026-03-03",dueDate:"2026-03-03",total:63,paid:0,due:63,cat:"Study Tour",mo:"Mar"},
   {contact:"Amaysim",invNum:"Damon Telephones",ref:"Damon Telephones",date:"2026-03-02",dueDate:"2026-03-02",total:60,paid:0,due:60,cat:"OPEX",mo:"Mar"},
+  {contact:"Woolworths",invNum:"ST-Okayama Daianji-Study Tour Graduation Ceremony",ref:"ST-Okayama Daianji-Study ",date:"2026-03-05",dueDate:"2026-03-05",total:48,paid:0,due:48,cat:"Study Tour",mo:"Mar"},
   {contact:"CHATGPT",invNum:"Direct Debit",ref:"Direct Debit",date:"2026-03-02",dueDate:"2026-03-05",total:32,paid:0,due:32,cat:"OPEX",mo:"Mar"},
   {contact:"Yidan Qin",invNum:"ST-Okayama Daianji-Welcome Coffee",ref:"ST-Okayama Daianji-Welcom",date:"2026-03-06",dueDate:"2026-03-06",total:30,paid:0,due:30,cat:"Study Tour",mo:"Mar"},
+  {contact:"Woolworths",invNum:"ST-Okayama Daianji-Cooking Class Materials Extra  ",ref:"ST-Okayama Daianji-Cookin",date:"2026-03-05",dueDate:"2026-03-05",total:28,paid:0,due:28,cat:"Study Tour",mo:"Mar"},
   {contact:"Lebara",invNum:"Direct Debit",ref:"Direct Debit",date:"2026-01-24",dueDate:"2026-01-25",total:22,paid:0,due:22,cat:"OPEX",mo:"Jan"},
   {contact:"Lebara",invNum:"Direct Debit",ref:"Direct Debit",date:"2026-02-24",dueDate:"2026-02-25",total:22,paid:0,due:22,cat:"OPEX",mo:"Feb"},
 ];
@@ -263,8 +267,6 @@ function DebtTab(){
       )
     ),
     e(OverallClearanceChart,null),
-    e("div",{className:"st",style:{marginTop:16,marginBottom:12}},"Trade AP Clearance",e("span",{className:"badge b-blue",style:{marginLeft:8}},"Reference-Matched")),
-    e(DebtClearanceTable,null),
     e(DebtCatClearanceTable,null),
     e("div",{className:"st",style:{marginTop:16,marginBottom:12}},"Statutory Clearance",e("span",{className:"badge b-amber",style:{marginLeft:8}},"ATO + Super + Payroll Tax")),
     e(StatClearanceTable,null),
@@ -302,32 +304,6 @@ function OverallClearanceChart(){
         e(RC.Tooltip,{contentStyle:{background:"#1E293B",border:"1px solid #334155",borderRadius:8,fontSize:12},labelStyle:{color:"#F8FAFC"},formatter:function(v){return["$"+v.toLocaleString("en-AU"),"Remaining Debt"]}}),
         e("defs",null,e("linearGradient",{id:"remGrad",x1:0,y1:0,x2:0,y2:1},e("stop",{offset:"5%",stopColor:"#F87171",stopOpacity:0.3}),e("stop",{offset:"95%",stopColor:"#F87171",stopOpacity:0.02}))),
         e(RC.Area,{type:"monotone",dataKey:"Remaining",stroke:"#F87171",strokeWidth:3,fill:"url(#remGrad)",dot:{fill:"#F87171",stroke:"#0B1120",strokeWidth:2,r:6},activeDot:{r:8}})
-      )
-    )
-  );
-}
-
-function DebtClearanceTable(){
-  return e("div",{className:"card",style:{padding:0,marginTop:8,overflow:"hidden"}},
-    e("table",null,
-      e("thead",null,e("tr",null,e("th",null,"Month"),e("th",{className:"tr"},"Cleared"),e("th",{className:"tr"},"Cumulative"),e("th",{className:"tr"},"Remaining"),e("th",{className:"tr"},"% Cleared"))),
-      e("tbody",null,
-        CLEARANCE.map(function(c,i){
-          return e("tr",{key:i},
-            e("td",null,c.label,c.partial?e("span",{style:{fontSize:10,color:"#64748B",marginLeft:4}},"partial"):""),
-            e("td",{className:"tr",style:{color:"#34D399",fontWeight:600}},fmt(c.cleared)),
-            e("td",{className:"tr",style:{color:"#34D399"}},fmt(c.cumCleared)),
-            e("td",{className:"tr",style:{color:"#F87171",fontWeight:700}},fmt(c.remaining)),
-            e("td",{className:"tr",style:{color:"#60A5FA",fontWeight:600}},(c.cumCleared/CLEAR_START*100).toFixed(1)+"%")
-          )
-        }),
-        e("tr",{style:{background:"rgba(30,41,59,0.6)"}},
-          e("td",{style:{fontWeight:700,color:"#94A3B8"}},"TOTAL"),
-          e("td",{className:"tr",style:{fontWeight:700,color:"#34D399"}},fmt(CLEAR_TOTAL)),
-          e("td",null,""),
-          e("td",{className:"tr",style:{fontWeight:700,color:"#F87171"}},fmt(CLEAR_START-CLEAR_TOTAL)),
-          e("td",{className:"tr",style:{fontWeight:700,color:"#60A5FA"}},(CLEAR_TOTAL/CLEAR_START*100).toFixed(1)+"%")
-        )
       )
     )
   );
@@ -494,7 +470,7 @@ function PayableTab(){
   var payRate=PAY_TOTAL_INV>0?(PAY_TOTAL_PAID/PAY_TOTAL_INV*100).toFixed(1):"0.0";
   return e("div",null,
     // KPI cards
-    e("div",{className:"grid g4",style:{marginBottom:16}},
+    e("div",{className:"grid g3",style:{marginBottom:16}},
       e("div",{className:"card",style:{textAlign:"center"}},
         e("div",{className:"ct"},"TOTAL INVOICED"),
         e("div",{className:"cv amber",style:{fontSize:28}},fmt(PAY_TOTAL_INV)),
@@ -510,11 +486,6 @@ function PayableTab(){
         e("div",{className:"cv red",style:{fontSize:28}},fmt(PAY_TOTAL_OUT)),
         e("div",{className:"cs"},(100-payRate).toFixed(1)+"% unpaid")
       ),
-      e("div",{className:"card",style:{textAlign:"center"}},
-        e("div",{className:"ct"},"OVERDUE (PAST DUE DATE)"),
-        e("div",{className:"cv",style:{fontSize:28,color:"#475569"}},"N/A"),
-        e("div",{className:"cs",style:{color:"#FBBF24"}},"No due date in source data")
-      )
     ),
     // Monthly Invoiced vs Paid chart
     e("div",{className:"st",style:{marginBottom:12}},"Monthly Invoiced vs Paid",e("span",{className:"badge b-blue",style:{marginLeft:8}},"2026")),
@@ -534,7 +505,7 @@ function PayableTab(){
     e(UnpaidListSection,null),
     // Source
     e("div",{className:"note",style:{marginTop:16}},
-      "Source: Xero AP Account Transactions \u2014 2026 invoices only ("+PAY_INVOICES+" invoices, 'new raw data' tab). Methodology: Reference-based matching (GROUP BY Col D). Excl LT_DEBT & Investigate. Due date data not available in source \u2014 overdue columns reserved for future update."
+      "Source: Xero AP Account Transactions \u2014 2026 invoices only ("+PAY_INVOICES+" invoices, 'new raw data' tab). Methodology: Reference-based matching (GROUP BY Col D). Excl LT_DEBT & Investigate. Past Due = invoices with due date before today (AmountDue > 0, Status=AUTHORISED)."
     )
   );
 }
