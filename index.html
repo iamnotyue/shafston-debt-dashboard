@@ -53,14 +53,14 @@ var useState=React.useState;
 
 // === DATA START ===
 // ========== TAB 1: DEBT MANAGEMENT DATA ==========
-var TRADE_PAYABLE=530427;
+var TRADE_PAYABLE=529927;
 var TRADE_INVOICES=468;
 var LT_DEBT=1599154;
 var INVESTIGATE=47080;
 var CATS=[
   {name:"Commission",outstanding:355450,invoices:404,color:"#8B5CF6"},
   {name:"Refund",outstanding:70589,invoices:17,color:"#F87171"},
-  {name:"Rent & Outgoing",outstanding:68522,invoices:7,color:"#F59E0B"},
+  {name:"Rent & Outgoing",outstanding:68022,invoices:7,color:"#F59E0B"},
   {name:"OPEX",outstanding:35866,invoices:40,color:"#3B82F6"},
 ];
 var EXTRA_DEBT=[
@@ -68,17 +68,17 @@ var EXTRA_DEBT=[
   {name:"ATO",outstanding:724508,color:"#F97316",source:"Xero BS CA02"},
   {name:"Payroll Tax",outstanding:75266,color:"#14B8A6",source:"QRO (manual)"}
 ];
-var TOTAL_DEBT=1360704;
+var TOTAL_DEBT=1360204;
 var maxCat=355450;
-var CLEAR_START=620124;
+var CLEAR_START=619624;
 var CLEAR_TOTAL=89697;
 var CLEARANCE=[
-  {label:"Jan 26",cleared:37338,cumCleared:37338,remaining:582786,partial:false},
-  {label:"Feb 26",cleared:45475,cumCleared:82813,remaining:537311,partial:false},
-  {label:"Mar 26",cleared:6883,cumCleared:89696,remaining:530428,partial:true},
+  {label:"Jan 26",cleared:37338,cumCleared:37338,remaining:582286,partial:false},
+  {label:"Feb 26",cleared:45475,cumCleared:82813,remaining:536811,partial:false},
+  {label:"Mar 26",cleared:6883,cumCleared:89696,remaining:529928,partial:true},
 ];
 var CAT_CLEARANCE=[
-  {name:"Rent & Outgoing",color:"#F59E0B",jan:11569,feb:18202,mar:0,total:29771,start:98293,remaining:68522},
+  {name:"Rent & Outgoing",color:"#F59E0B",jan:11569,feb:18202,mar:0,total:29771,start:97793,remaining:68022},
   {name:"OPEX",color:"#3B82F6",jan:10923,feb:9631,mar:0,total:20554,start:56420,remaining:35866},
   {name:"Study Tour",color:"#06B6D4",jan:5794,feb:8060,mar:2144,total:15998,start:15998,remaining:0},
   {name:"Refund",color:"#F87171",jan:7067,feb:1788,mar:2969,total:11824,start:82413,remaining:70589},
@@ -92,34 +92,34 @@ var STAT_CLEARANCE=[
   {name:"Payroll Tax",color:"#14B8A6",start:95792,jan:6842,feb:6842,mar:6842,total:20526,remaining:75266},
 ];
 // ========== TAB 2: PAYABLE MANAGEMENT DATA (2026 only) ==========
-var PAY_TOTAL_INV=810298;
-var PAY_TOTAL_PAID=631143;
-var PAY_TOTAL_OUT=179155;
-var PAY_INVOICES=659;
-var PAY_PAST_DUE=157439;
+var PAY_TOTAL_INV=838586;
+var PAY_TOTAL_PAID=652747;
+var PAY_TOTAL_OUT=185839;
+var PAY_INVOICES=703;
+var PAY_PAST_DUE=164122;
 var PAY_MONTHLY=[
   {label:"Jan 26",invoiced:232399,paid:173778,unpaid:58621,rate:74.8,cumInv:232399,cumPaid:173778,cumOut:58621,dueOverdue:"N/A",partial:false},
-  {label:"Feb 26",invoiced:272961,paid:252246,unpaid:20715,rate:92.4,cumInv:505360,cumPaid:426024,cumOut:79336,dueOverdue:"N/A",partial:false},
-  {label:"Mar 26",invoiced:303912,paid:204093,unpaid:99819,rate:67.2,cumInv:809272,cumPaid:630117,cumOut:179155,dueOverdue:"N/A",partial:true},
-  {label:"Apr 26",invoiced:750,paid:750,unpaid:0,rate:100,cumInv:810022,cumPaid:630867,cumOut:179155,dueOverdue:"N/A",partial:false},
-  {label:"Jul 26",invoiced:276,paid:276,unpaid:0,rate:100,cumInv:810298,cumPaid:631143,cumOut:179155,dueOverdue:"N/A",partial:false},
+  {label:"Feb 26",invoiced:273523,paid:252808,unpaid:20715,rate:92.4,cumInv:505922,cumPaid:426586,cumOut:79336,dueOverdue:"N/A",partial:false},
+  {label:"Mar 26",invoiced:331638,paid:225135,unpaid:106503,rate:67.9,cumInv:837560,cumPaid:651721,cumOut:185839,dueOverdue:"N/A",partial:true},
+  {label:"Apr 26",invoiced:750,paid:750,unpaid:0,rate:100,cumInv:838310,cumPaid:652471,cumOut:185839,dueOverdue:"N/A",partial:false},
+  {label:"Jul 26",invoiced:276,paid:276,unpaid:0,rate:100,cumInv:838586,cumPaid:652747,cumOut:185839,dueOverdue:"N/A",partial:false},
 ];
 var PAY_CAT=[
-  {name:"OPEX",color:"#3B82F6",inv:415292,paid:377606,out:37686,cnt:498,
-   janInv:122195,janPaid:120963,febInv:106929,febPaid:101795,marInv:186168,marPaid:154848,aprInv:0,aprPaid:0,julInv:0,julPaid:0},
-  {name:"Study Tour",color:"#06B6D4",inv:280050,paid:218432,out:61618,cnt:71,
-   janInv:25549,janPaid:25549,febInv:143639,febPaid:143639,marInv:110862,marPaid:49245,aprInv:0,aprPaid:0,julInv:0,julPaid:0},
-  {name:"Rent & Outgoing",color:"#F59E0B",inv:53259,paid:17414,out:35845,cnt:21,
-   janInv:36608,janPaid:13106,febInv:9769,febPaid:4308,marInv:6881,marPaid:0,aprInv:0,aprPaid:0,julInv:0,julPaid:0},
+  {name:"OPEX",color:"#3B82F6",inv:440251,paid:396181,out:44069,cnt:526,
+   janInv:122195,janPaid:120963,febInv:106929,febPaid:101795,marInv:211127,marPaid:173424,aprInv:0,aprPaid:0,julInv:0,julPaid:0},
+  {name:"Study Tour",color:"#06B6D4",inv:283067,paid:221149,out:61918,cnt:85,
+   janInv:25549,janPaid:25549,febInv:144201,febPaid:144201,marInv:113317,marPaid:51399,aprInv:0,aprPaid:0,julInv:0,julPaid:0},
+  {name:"Rent & Outgoing",color:"#F59E0B",inv:53572,paid:17727,out:35845,cnt:23,
+   janInv:36608,janPaid:13106,febInv:9769,febPaid:4308,marInv:7194,marPaid:312,aprInv:0,aprPaid:0,julInv:0,julPaid:0},
   {name:"Refund",color:"#F87171",inv:33337,paid:8496,out:24842,cnt:20,
    janInv:27432,janPaid:7596,febInv:5905,febPaid:900,marInv:0,marPaid:0,aprInv:0,aprPaid:0,julInv:0,julPaid:0},
   {name:"Commission",color:"#8B5CF6",inv:28360,paid:9194,out:19166,cnt:49,
    janInv:20615,janPaid:6564,febInv:6719,febPaid:1604,marInv:0,marPaid:0,aprInv:750,aprPaid:750,julInv:276,julPaid:276},
 ];
 var PAY_UNPAID=[
-  {contact:"Flylink Aviation College",invNum:"ST-INV-3329-GRP CHIM AUS7D6N 150326",ref:"ST-INV-3329-GRP CHIM AUS7",date:"2026-03-19",dueDate:"2026-03-24",total:48483,paid:0,due:48483,cat:"Study Tour",mo:"Mar"},
-  {contact:"BRISBANE CITY COUNCIL",invNum:"BCC Rate - 101/188 SHAFSTON AVE -Q1 2026",ref:"BCC Rate - 101/188 SHAFST",date:"2026-01-01",dueDate:"2026-01-01",total:9253,paid:0,due:9253,cat:"Rent & Outgoing",mo:"Jan"},
-  {contact:"SW Accountants & Advisors",invNum:"Admin - Account Fee -INV-TI-000046419",ref:"Admin - Account Fee -INV-",date:"2026-03-11",dueDate:"2026-03-11",total:8250,paid:0,due:8250,cat:"OPEX",mo:"Mar"},
+  {contact:"Flylink Aviation College",invNum:"ST-INV-3329",ref:"ST-INV-3329-GRP CHIM AUS7",date:"2026-03-19",dueDate:"2026-03-24",total:48483,paid:0,due:48483,cat:"Study Tour",mo:"Mar"},
+  {contact:"BRISBANE CITY COUNCIL",invNum:"BCC Rate Q1 2026",ref:"BCC Rate - 101/188 SHAFST",date:"2026-01-01",dueDate:"2026-01-01",total:9253,paid:0,due:9253,cat:"Rent & Outgoing",mo:"Jan"},
+  {contact:"SW Accountants & Advisors",invNum:"Account Fee -TI-000046419",ref:"Admin - Account Fee -INV-",date:"2026-03-11",dueDate:"2026-03-11",total:8250,paid:0,due:8250,cat:"OPEX",mo:"Mar"},
   {contact:"Mark David RAVU",invNum:"Refund-Mark David RAVU",ref:"Refund-Mark David RAVU",date:"2026-01-07",dueDate:"2026-02-04",total:5246,paid:0,due:5246,cat:"Refund",mo:"Jan"},
   {contact:"SW Accountants & Advisors",invNum:"Admin - Account Fee -TI-000044474",ref:"Admin - Account Fee -TI-0",date:"2026-03-13",dueDate:"2026-03-13",total:4400,paid:0,due:4400,cat:"OPEX",mo:"Mar"},
   {contact:"SW Accountants & Advisors",invNum:"Admin - Account Fee -TI-000039120",ref:"Admin - Account Fee -TI-0",date:"2026-03-13",dueDate:"2026-03-13",total:3850,paid:0,due:3850,cat:"OPEX",mo:"Mar"},
