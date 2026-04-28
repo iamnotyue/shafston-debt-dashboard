@@ -85,12 +85,12 @@ var CAT_CLEARANCE=[
   {name:"Refund",color:"#F87171",jan:7067,feb:1788,mar:2969,apr:4780,total:16604,start:76163,remaining:59559},
   {name:"Study Tour",color:"#06B6D4",jan:5794,feb:8060,mar:2144,apr:0,total:15998,start:15998,remaining:0},
 ];
-var STAT_CLEAR_START=923782;
-var STAT_CLEAR_TOTAL=98505;
+var STAT_CLEAR_START=934184;
+var STAT_CLEAR_TOTAL=108907;
 var STAT_CLEARANCE=[
-  {name:"ATO",color:"#F97316",start:730508,jan:2000,feb:4000,mar:5000,total:11000,remaining:719508},
-  {name:"Super",color:"#EC4899",start:97482,jan:1087,feb:56642,mar:9250,total:66979,remaining:30503},
-  {name:"Payroll Tax",color:"#14B8A6",start:95792,jan:6842,feb:6842,mar:6842,total:20526,remaining:75266},
+  {name:"ATO",color:"#F97316",start:730508,jan:2000,feb:4000,mar:0,apr:5000,total:11000,remaining:719508},
+  {name:"Super",color:"#EC4899",start:107884,jan:1087,feb:56642,mar:9250,apr:10402,total:77381,remaining:30503},
+  {name:"Payroll Tax",color:"#14B8A6",start:95792,jan:6842,feb:6842,mar:6842,apr:0,total:20526,remaining:75266},
 ];
 // ========== TAB 2: PAYABLE MANAGEMENT DATA (2026 only) ==========
 var PAY_TOTAL_INV=1002487;
@@ -296,16 +296,16 @@ function DebtTab(){
 
 function OverallClearanceChart(){
   var totalStart=CLEAR_START+STAT_CLEAR_START;
-  var months=["Jan","Feb","Mar"];
-  var keys=["jan","feb","mar"];
+  var months=["Jan","Feb","Mar","Apr"];
+  var keys=["jan","feb","mar","apr"];
   var data=[{name:"Dec 25",Remaining:totalStart}];
   var cumTrade=0,cumStat=0;
   months.forEach(function(mo,i){
     cumTrade+=(CLEARANCE[i]?CLEARANCE[i].cleared:0);
     var statMo=0;
-    STAT_CLEARANCE.forEach(function(c){statMo+=c[keys[i]]});
+    STAT_CLEARANCE.forEach(function(c){statMo+=(c[keys[i]]||0)});
     cumStat+=statMo;
-    data.push({name:mo+" 26"+(i===2?"*":""),Remaining:totalStart-cumTrade-cumStat});
+    data.push({name:mo+" 26"+(i===3?"*":""),Remaining:totalStart-cumTrade-cumStat});
   });
   var minVal=data[data.length-1].Remaining;
   var yMin=Math.floor(minVal/100000)*100000;
@@ -327,7 +327,7 @@ function OverallClearanceChart(){
 function DebtCatClearanceTable(){
   return e("div",{className:"card",style:{padding:0,overflow:"hidden"}},
     e("table",null,
-      e("thead",null,e("tr",null,e("th",null,"Category"),e("th",{className:"tr"},"Starting"),e("th",{className:"tr"},"Jan"),e("th",{className:"tr"},"Feb"),e("th",{className:"tr"},"Mar"),e("th",{className:"tr"},"Total Cleared"),e("th",{className:"tr"},"Remaining"),e("th",{className:"tr"},"% Cleared"))),
+      e("thead",null,e("tr",null,e("th",null,"Category"),e("th",{className:"tr"},"Starting"),e("th",{className:"tr"},"Jan"),e("th",{className:"tr"},"Feb"),e("th",{className:"tr"},"Mar"),e("th",{className:"tr"},"Apr"),e("th",{className:"tr"},"Total Cleared"),e("th",{className:"tr"},"Remaining"),e("th",{className:"tr"},"% Cleared"))),
       e("tbody",null,
         CAT_CLEARANCE.map(function(c,i){
           var pct=(c.total/c.start*100).toFixed(1);
@@ -337,6 +337,7 @@ function DebtCatClearanceTable(){
             e("td",{className:"tr",style:{color:c.jan>0?"#34D399":"#475569"}},c.jan>0?fmt(c.jan):"\u2014"),
             e("td",{className:"tr",style:{color:c.feb>0?"#34D399":"#475569"}},c.feb>0?fmt(c.feb):"\u2014"),
             e("td",{className:"tr",style:{color:c.mar>0?"#34D399":"#475569"}},c.mar>0?fmt(c.mar):"\u2014"),
+            e("td",{className:"tr",style:{color:c.apr>0?"#34D399":"#475569"}},c.apr>0?fmt(c.apr):"\u2014"),
             e("td",{className:"tr",style:{color:"#34D399",fontWeight:600}},fmt(c.total)),
             e("td",{className:"tr",style:{color:"#F87171",fontWeight:600}},c.remaining>1000?fmtK(c.remaining):fmt(c.remaining)),
             e("td",{className:"tr"},e("div",{style:{display:"flex",alignItems:"center",justifyContent:"flex-end",gap:8}},
@@ -351,6 +352,7 @@ function DebtCatClearanceTable(){
           e("td",{className:"tr",style:{fontWeight:700,color:"#34D399"}},fmt(CLEARANCE[0].cleared)),
           e("td",{className:"tr",style:{fontWeight:700,color:"#34D399"}},fmt(CLEARANCE[1].cleared)),
           e("td",{className:"tr",style:{fontWeight:700,color:"#34D399"}},fmt(CLEARANCE[2].cleared)),
+          e("td",{className:"tr",style:{fontWeight:700,color:"#34D399"}},CLEARANCE[3]?fmt(CLEARANCE[3].cleared):"\u2014"),
           e("td",{className:"tr",style:{fontWeight:700,color:"#34D399"}},fmt(CLEAR_TOTAL)),
           e("td",{className:"tr",style:{fontWeight:700,color:"#F87171"}},fmtK(TRADE_PAYABLE)),
           e("td",{className:"tr",style:{fontWeight:700,color:"#60A5FA"}},(CLEAR_TOTAL/CLEAR_START*100).toFixed(1)+"%")
@@ -361,11 +363,11 @@ function DebtCatClearanceTable(){
 }
 
 function StatClearanceTable(){
-  var janT=0,febT=0,marT=0;
-  STAT_CLEARANCE.forEach(function(c){janT+=c.jan;febT+=c.feb;marT+=c.mar});
+  var janT=0,febT=0,marT=0,aprT=0;
+  STAT_CLEARANCE.forEach(function(c){janT+=c.jan;febT+=c.feb;marT+=c.mar;aprT+=(c.apr||0)});
   return e("div",{className:"card",style:{padding:0,overflow:"hidden"}},
     e("table",null,
-      e("thead",null,e("tr",null,e("th",null,"Statutory Item"),e("th",{className:"tr"},"Opening"),e("th",{className:"tr"},"Jan"),e("th",{className:"tr"},"Feb"),e("th",{className:"tr"},"Mar"),e("th",{className:"tr"},"Total Cleared"),e("th",{className:"tr"},"Remaining"),e("th",{className:"tr"},"% Cleared"))),
+      e("thead",null,e("tr",null,e("th",null,"Statutory Item"),e("th",{className:"tr"},"Opening"),e("th",{className:"tr"},"Jan"),e("th",{className:"tr"},"Feb"),e("th",{className:"tr"},"Mar"),e("th",{className:"tr"},"Apr"),e("th",{className:"tr"},"Total Cleared"),e("th",{className:"tr"},"Remaining"),e("th",{className:"tr"},"% Cleared"))),
       e("tbody",null,
         STAT_CLEARANCE.map(function(c,i){
           var pct=c.start>0?(c.total/c.start*100).toFixed(1):"0.0";
@@ -375,6 +377,7 @@ function StatClearanceTable(){
             e("td",{className:"tr",style:{color:c.jan>0?"#34D399":"#475569"}},c.jan>0?fmt(c.jan):"\u2014"),
             e("td",{className:"tr",style:{color:c.feb>0?"#34D399":"#475569"}},c.feb>0?fmt(c.feb):"\u2014"),
             e("td",{className:"tr",style:{color:c.mar>0?"#34D399":"#475569"}},c.mar>0?fmt(c.mar):"\u2014"),
+            e("td",{className:"tr",style:{color:(c.apr||0)>0?"#34D399":"#475569"}},(c.apr||0)>0?fmt(c.apr):"\u2014"),
             e("td",{className:"tr",style:{color:"#34D399",fontWeight:600}},fmt(c.total)),
             e("td",{className:"tr",style:{color:"#F87171",fontWeight:600}},fmtK(c.remaining)),
             e("td",{className:"tr"},e("div",{style:{display:"flex",alignItems:"center",justifyContent:"flex-end",gap:8}},
@@ -389,6 +392,7 @@ function StatClearanceTable(){
           e("td",{className:"tr",style:{fontWeight:700,color:"#34D399"}},janT>0?fmt(janT):"\u2014"),
           e("td",{className:"tr",style:{fontWeight:700,color:"#34D399"}},febT>0?fmt(febT):"\u2014"),
           e("td",{className:"tr",style:{fontWeight:700,color:"#34D399"}},marT>0?fmt(marT):"\u2014"),
+          e("td",{className:"tr",style:{fontWeight:700,color:"#34D399"}},aprT>0?fmt(aprT):"\u2014"),
           e("td",{className:"tr",style:{fontWeight:700,color:"#34D399"}},fmt(STAT_CLEAR_TOTAL)),
           e("td",{className:"tr",style:{fontWeight:700,color:"#F87171"}},fmtK(STAT_CLEAR_START-STAT_CLEAR_TOTAL)),
           e("td",{className:"tr",style:{fontWeight:700,color:"#60A5FA"}},(STAT_CLEAR_TOTAL/STAT_CLEAR_START*100).toFixed(1)+"%")
