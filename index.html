@@ -273,7 +273,7 @@ function DebtTab(){
       e("div",{className:"card",style:{textAlign:"center"}},
         e("div",{className:"ct"},"CLEARANCE RATE"),
         e("div",{className:"cv blue",style:{fontSize:32}},((CLEAR_TOTAL+STAT_CLEAR_TOTAL)/(CLEAR_START+STAT_CLEAR_START)*100).toFixed(1)+"%"),
-        e("div",{className:"cs"},"Jan \u2014 Mar 2026")
+        e("div",{className:"cs"},"Jan \u2014 Apr 2026")
       ),
       e("div",{className:"card",style:{textAlign:"center"}},
         e("div",{className:"ct"},"REMAINING PRE-2026 DEBT"),
@@ -409,7 +409,7 @@ function UnpaidListSection(){
   var catFilterState=useState("All");
   var catFilter=catFilterState[0];
   var setCatFilter=catFilterState[1];
-  var months=["All","Jan","Feb","Mar"];
+  var months=["All","Jan","Feb","Mar","Apr"];
   var cats=["All"];
   PAY_UNPAID.forEach(function(inv){if(cats.indexOf(inv.cat)===-1)cats.push(inv.cat)});
   var filtered=PAY_UNPAID.filter(function(inv){
