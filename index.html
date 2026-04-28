@@ -650,6 +650,7 @@ function PayableCatTable(){
         e("th",{className:"tr"},"Jan Inv/Paid"),
         e("th",{className:"tr"},"Feb Inv/Paid"),
         e("th",{className:"tr"},"Mar Inv/Paid"),
+        e("th",{className:"tr"},"Apr Inv/Paid"),
         e("th",{className:"tr"},"Rate")
       )),
       e("tbody",null,
@@ -663,6 +664,7 @@ function PayableCatTable(){
             e("td",{className:"tr",style:{fontSize:11,color:"#94A3B8"}},fmtK(c.janInv)+"/"+fmtK(c.janPaid)),
             e("td",{className:"tr",style:{fontSize:11,color:"#94A3B8"}},fmtK(c.febInv)+"/"+fmtK(c.febPaid)),
             e("td",{className:"tr",style:{fontSize:11,color:"#94A3B8"}},fmtK(c.marInv)+"/"+fmtK(c.marPaid)),
+            e("td",{className:"tr",style:{fontSize:11,color:"#94A3B8"}},fmtK(c.aprInv||0)+"/"+fmtK(c.aprPaid||0)),
             e("td",{className:"tr"},
               e("div",{style:{display:"flex",alignItems:"center",justifyContent:"flex-end",gap:8}},
                 e("div",{className:"pbar",style:{width:50}},e("div",{className:"pfill",style:{width:rate+"%",background:c.color}})),
@@ -679,6 +681,7 @@ function PayableCatTable(){
           e("td",{className:"tr",style:{fontWeight:700,color:"#94A3B8"}},fmtK(PAY_MONTHLY[0].invoiced)+"/"+fmtK(PAY_MONTHLY[0].paid)),
           e("td",{className:"tr",style:{fontWeight:700,color:"#94A3B8"}},fmtK(PAY_MONTHLY[1].invoiced)+"/"+fmtK(PAY_MONTHLY[1].paid)),
           e("td",{className:"tr",style:{fontWeight:700,color:"#94A3B8"}},fmtK(PAY_MONTHLY[2].invoiced)+"/"+fmtK(PAY_MONTHLY[2].paid)),
+          e("td",{className:"tr",style:{fontWeight:700,color:"#94A3B8"}},PAY_MONTHLY[3]?fmtK(PAY_MONTHLY[3].invoiced)+"/"+fmtK(PAY_MONTHLY[3].paid):"—"),
           e("td",{className:"tr",style:{fontWeight:700,color:"#60A5FA"}},(PAY_TOTAL_PAID/PAY_TOTAL_INV*100).toFixed(1)+"%")
         )
       )
@@ -694,7 +697,7 @@ function App(){
   return e("div",{className:"app"},
     e("div",{className:"header"},
       e("h1",null,"Shafston Debt Management"),
-      e("div",{className:"sub"},"Shafston International Pty Ltd | AP Account | Reference-Matched Analysis | Mar 2026")
+      e("div",{className:"sub"},"Shafston International Pty Ltd | AP Account | Reference-Matched Analysis | Apr 2026")
     ),
     e("div",{className:"tabs"},
       e("div",{className:"tab"+(tab==="debt"?" active":""),onClick:function(){setTab("debt")}},"Debt Management"),
